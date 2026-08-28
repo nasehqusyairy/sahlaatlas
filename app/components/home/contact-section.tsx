@@ -8,7 +8,7 @@ export function ContactSection() {
     return (
         <section
             id="contact"
-            className="relative py-24 bg-fixed bg-center bg-cover bg-no-repeat overflow-hidden"
+            className="relative py-12 bg-fixed bg-center bg-cover bg-no-repeat overflow-hidden"
             style={{
                 // Background gambar komoditas/pertanian dengan efek Parallax via bg-fixed
                 backgroundImage: `url('/images/contact.jpg')`,

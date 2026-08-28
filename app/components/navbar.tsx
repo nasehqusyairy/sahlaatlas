@@ -16,16 +16,18 @@ import {
 
 // Data item navbar terpusat
 const NAV_ITEMS = [
+    { label: "Home", href: "#home" },
     { label: "About Us", href: "#about" },
-    {
-        label: "Our Commodities",
-        children: [
-            { label: "Coffee", href: "#coffee" },
-            { label: "Cocoa", href: "#cocoa" },
-            { label: "Tea", href: "#tea" },
-        ],
-    },
+    // {
+    //     label: "Our Commodities",
+    //     children: [
+    //         { label: "Coffee", href: "#coffee" },
+    //         { label: "Cocoa", href: "#cocoa" },
+    //         { label: "Tea", href: "#tea" },
+    //     ],
+    // },
     { label: "Catalog", href: "#catalog" },
+    { label: "Blog", href: "#blog" },
 ];
 
 export function Navbar() {
@@ -50,7 +52,7 @@ export function Navbar() {
 
                 {/* Navigation (Desktop) */}
                 <div className="hidden md:flex items-center gap-6">
-                    <nav className="flex items-center gap-6 text-sm font-medium">
+                    {/* <nav className="flex items-center gap-6 text-sm font-medium">
                         {NAV_ITEMS.map((item, index) =>
                             item.children ? (
                                 <DropdownMenu key={index}>
@@ -78,6 +80,17 @@ export function Navbar() {
                                 </Link>
                             )
                         )}
+                    </nav> */}
+                    <nav className="flex items-center gap-6 text-sm font-medium">
+                        {NAV_ITEMS.map((item, index) => (
+                            <Link
+                                key={index}
+                                to={item.href}
+                                className="hover:text-primary transition-colors"
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
                     </nav>
 
                     <Button variant="default" className="gap-2">
@@ -110,7 +123,7 @@ export function Navbar() {
             {/* Mobile Navigation Menu (Collapsible Body) */}
             <Collapsible open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen} className="md:hidden">
                 <CollapsibleContent className="border-t px-4 py-4 bg-background shadow-lg transition-all">
-                    <nav className="flex flex-col gap-1">
+                    {/* <nav className="flex flex-col gap-1">
                         {NAV_ITEMS.map((item, index) =>
                             item.children ? (
                                 <Collapsible
@@ -149,6 +162,18 @@ export function Navbar() {
                                 </Link>
                             )
                         )}
+                    </nav> */}
+                    <nav className="flex flex-col gap-1">
+                        {NAV_ITEMS.map((item, index) => (
+                            <Link
+                                key={index}
+                                to={item.href}
+                                className="text-base font-medium px-3 py-2 hover:bg-card hover:text-primary transition-colors"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
                     </nav>
                 </CollapsibleContent>
             </Collapsible>

@@ -6,7 +6,7 @@ export function PageFooter() {
         <footer className="bg-primary text-primary-foreground">
             <div className="container mx-auto px-4 py-12">
                 {/* Main Content Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div className="grid md:grid-cols-4 gap-8">
                     {/* Brand & Logo */}
                     <div className="space-y-4 md:col-span-1">
                         <img loading="lazy"
@@ -23,12 +23,12 @@ export function PageFooter() {
 
                     {/* Quick Links Column 1 */}
                     <div>
-                        <h3 className="font-semibold text-lg mb-4"> Links</h3>
+                        <h3 className="font-semibold text-lg mb-4">Navigations</h3>
                         <ul className="space-y-2 text-sm opacity-80">
                             <li><a href="#" className="hover:opacity-100 hover:underline transition-all">Home</a></li>
-                            <li><a href="#products" className="hover:opacity-100 hover:underline transition-all">Our Coffee Beans</a></li>
-                            <li><a href="#about" className="hover:opacity-100 hover:underline transition-all">About Us</a></li>
-                            <li><a href="#export-process" className="hover:opacity-100 hover:underline transition-all">Export Process</a></li>
+                            <li><a href="#products" className="hover:opacity-100 hover:underline transition-all">About</a></li>
+                            <li><a href="#about" className="hover:opacity-100 hover:underline transition-all">Catalog</a></li>
+                            <li><a href="#about" className="hover:opacity-100 hover:underline transition-all">Blog</a></li>
                         </ul>
                     </div>
 
