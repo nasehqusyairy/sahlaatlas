@@ -29,6 +29,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Tag Standar Modern (Chrome, Edge, Firefox, Brave, Opera untuk Android & Desktop) */}
+        <meta name="theme-color" content="#053719" />
+
+        {/* Khusus iOS Safari (iPhone & iPad) */}
+        {/* Nilai yang valid hanya: default, black, atau black-translucent */}
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        {/* Khusus Windows Phone / Windows Tile (Kompatibilitas perangkat lama) */}
+        <meta name="msapplication-navbutton-color" content="#053719" />
+        <meta name="msapplication-TileColor" content="#053719" />
         <Meta />
         <Links />
       </head>
