@@ -46,7 +46,7 @@ function MenuCarousel() {
             </CarouselContent>
 
             {/* Wrapper untuk mengetengahkan tombol */}
-            <div className="flex justify-center gap-4 mt-4">
+            <div className="flex justify-center gap-4 mt-12 text-white">
                 <CarouselPrevious className="static" />
                 <CarouselNext className="static" />
             </div>
@@ -60,7 +60,7 @@ export function MenuSection() {
         <section id="menu" className="py-12 bg-primary">
             <div className="container mx-auto p-4">
                 <div className="mb-12 text-primary-foreground">
-                    <h2 className="text-2xl lg:text-4xl font-bold">Lorem Ipsum</h2>
+                    <h2 className="text-2xl lg:text-4xl font-bold">Catalog</h2>
                     <p>Lorem ipsum dolor sit amet</p>
                 </div>
                 <MenuCarousel />

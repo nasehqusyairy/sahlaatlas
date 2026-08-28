@@ -1,4 +1,6 @@
 import { AboutSection } from "~/components/home/about-section";
+import { CommoditySection } from "~/components/home/commodity-section";
+import { ContactSection } from "~/components/home/contact-section";
 import { HeroSection } from "~/components/home/hero-section";
 import { MenuSection } from "~/components/home/menu-section";
 import { TestimonySection } from "~/components/home/testimony-section";
@@ -25,8 +27,9 @@ export default function Home(props: {
       <Navbar />
       <HeroSection />
       <AboutSection />
+      <CommoditySection />
       <MenuSection />
-      <TestimonySection />
+      <ContactSection />
       <PageFooter />
     </>
   );

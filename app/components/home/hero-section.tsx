@@ -35,7 +35,7 @@ export function HeroSection() {
             x: "0%",
             transition: {
                 duration: 1,
-                delay: 0.15, // Selaras dengan animasi gambar
+                delay: 1.30, // Selaras dengan animasi gambar
                 ease: "linear",
             },
         },
@@ -43,7 +43,7 @@ export function HeroSection() {
 
     return (
         <section id="home">
-            <div className="h-80 lg:h-[75vh] relative overflow-hidden flex items-end bg-muted">
+            <div className="h-80 lg:h-[75vh] relative overflow-hidden flex items-end">
                 {/* Background Gambar dengan Clip Path Responsive (5% mobile, 20% desktop) */}
                 <motion.img
                     src="/images/hero.jpg"
@@ -61,7 +61,7 @@ export function HeroSection() {
                 />
 
                 {/* Tombol See All di Pojok Kanan Atas dengan Desain Mirip Span & Transisi dari Kanan */}
-                <motion.div
+                {/* <motion.div
                     className="absolute top-2 right-0 z-20 overflow-hidden"
                     initial="hidden"
                     animate="visible"
@@ -69,14 +69,14 @@ export function HeroSection() {
                     <motion.div variants={buttonVariants}>
                         <Button
                             variant="ghost"
-                            className="bg-muted lg:text-xl font-bold py-4 size-auto"
+                            className="lg:text-xl font-bold py-4 size-auto bg-background"
                             size={'lg'}
                         >
                             See all
                             <ArrowRight className="size-8 p-2 bg-primary text-primary-foreground" />
                         </Button>
                     </motion.div>
-                </motion.div>
+                </motion.div> */}
 
                 {/* Mask Bingkai Kiri Teks */}
                 <div className="relative z-10 overflow-hidden">
@@ -87,21 +87,21 @@ export function HeroSection() {
                     >
                         <motion.span
                             variants={spanVariants}
-                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pl-60 lg:pr-12 bg-muted"
+                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pl-60 lg:pr-12 bg-background"
                         >
                             Rooted
                         </motion.span>
 
                         <motion.span
                             variants={spanVariants}
-                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pl-60 lg:pr-12 bg-muted"
+                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pl-60 lg:pr-12 bg-background"
                         >
                             In Indonesia,
                         </motion.span>
 
                         <motion.span
                             variants={spanVariants}
-                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pl-60 lg:pr-12 bg-muted"
+                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pl-60 lg:pr-12 bg-background"
                         >
                             Trusted Worldwide
                         </motion.span>
