@@ -37,6 +37,12 @@ function MenuCard() {
 function MenuCarousel() {
     return (
         <Carousel className="w-full">
+            {/* Wrapper untuk mengetengahkan tombol */}
+            <div className="flex gap-4 mb-4 text-white">
+                <CarouselPrevious className="static" />
+                <CarouselNext className="static" />
+            </div>
+
             <CarouselContent className="-ml-1">
                 {Array.from({ length: 5 }).map((_, index) => (
                     <CarouselItem key={index} className="basis-1/2 pl-1 lg:basis-1/4">
@@ -45,11 +51,12 @@ function MenuCarousel() {
                 ))}
             </CarouselContent>
 
-            {/* Wrapper untuk mengetengahkan tombol */}
-            <div className="flex justify-center gap-4 mt-12 text-white">
-                <CarouselPrevious className="static" />
-                <CarouselNext className="static" />
+            <div className="text-primary-foreground mt-12 lg:flex justify-end">
+                <Button variant="outline" size="lg" className={'w-full lg:w-auto'}>
+                    See More
+                </Button>
             </div>
+
         </Carousel>
     )
 }
@@ -57,9 +64,9 @@ function MenuCarousel() {
 
 export function MenuSection() {
     return (
-        <section id="menu" className="py-12 bg-primary">
+        <section id="menu" className="py-4 bg-primary">
             <div className="container mx-auto p-4">
-                <div className="mb-12 text-primary-foreground">
+                <div className="mb-4 text-primary-foreground">
                     <h2 className="text-2xl lg:text-4xl font-bold">Catalog</h2>
                     <p>Lorem ipsum dolor sit amet</p>
                 </div>

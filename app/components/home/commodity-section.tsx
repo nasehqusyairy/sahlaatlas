@@ -53,7 +53,7 @@ export function CommoditySection() {
                             ))}
                         </ol>
 
-                        <Button variant="outline" size="lg">
+                        <Button variant="outline" size="lg" className={'w-full lg:w-auto'}>
                             See More
                         </Button>
                     </div>

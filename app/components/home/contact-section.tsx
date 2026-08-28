@@ -38,7 +38,7 @@ export function ContactSection() {
                                     <Phone className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-400">Phone / Whatsapp</p>
+                                    <p className="text-xs">Phone / Whatsapp</p>
                                     <p className="text-base font-medium">+62 81379264406</p>
                                 </div>
                             </div>
@@ -48,7 +48,7 @@ export function ContactSection() {
                                     <Mail className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-400">Email</p>
+                                    <p className="text-xs">Email</p>
                                     <p className="text-base font-medium">infosahlaatlas@gmail.com</p>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@ export function ContactSection() {
                                     <Globe className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-400">Website</p>
+                                    <p className="text-xs">Website</p>
                                     <p className="text-base font-medium">www.sahlaatlas.com</p>
                                 </div>
                             </div>
@@ -68,7 +68,7 @@ export function ContactSection() {
                                     <MapPin className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-gray-400">Location</p>
+                                    <p className="text-xs">Location</p>
                                     <p className="text-base font-medium">Bekasi, Indonesia</p>
                                 </div>
                             </div>

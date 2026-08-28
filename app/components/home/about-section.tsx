@@ -42,7 +42,7 @@ export function AboutSection() {
                             Driven by quality, sustainability, and long-term partnerships, we ensure that every commodity meets strict international standards to support coffee roasters, food industries, and global distributors worldwide.
                         </p>
 
-                        <Button variant="outline" size="lg">
+                        <Button variant="outline" size="lg" className={'w-full lg:w-auto'}>
                             See More
                         </Button>
                     </div>
