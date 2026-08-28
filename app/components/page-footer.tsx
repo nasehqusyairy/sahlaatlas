@@ -9,7 +9,7 @@ export function PageFooter() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* Brand & Logo */}
                     <div className="space-y-4 md:col-span-1">
-                        <img
+                        <img loading="lazy"
                             src="/images/logo.png"
                             alt="Coffee Exporter Logo"
                             className="h-12 bg-background p-2"

@@ -45,7 +45,7 @@ export function Navbar() {
 
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-2">
-                    <img src="/images/logo.png" alt="PT Sahla Atlas Export" className="h-12 w-auto" />
+                    <img loading="lazy" src="/images/logo.png" alt="PT Sahla Atlas Export" className="h-12 w-auto" />
                 </Link>
 
                 {/* Navigation (Desktop) */}

@@ -10,7 +10,7 @@ export function AboutSection() {
                         {/* Gambar 1 (Utama / Belakang - Dibuat Potret) */}
                         {/* Menggunakan aspect-[3/4] dan menghapus fixed height agar mengikuti rasio potret */}
                         <div className="w-4/5 aspect-3/4 mx-auto relative z-0">
-                            <img
+                            <img loading="lazy"
                                 src="/images/farmer2.jpg"
                                 alt="Indonesian Commodity Farmers"
                                 className="w-full h-full object-cover"
@@ -19,7 +19,7 @@ export function AboutSection() {
 
                         {/* Gambar 2 (Pojok Kanan Bawah - Memotong Gambar Utama dari Depan Bawah) */}
                         <div className="absolute bottom-0 right-0 w-3/5 h-55 sm:h-70 z-20 border-8 border-muted">
-                            <img
+                            <img loading="lazy"
                                 src="/images/farmer1.jpg"
                                 alt="Premium Coffee Beans Harvest"
                                 className="w-full h-full object-cover"
