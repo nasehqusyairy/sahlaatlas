@@ -43,7 +43,7 @@ export function HeroSection() {
 
     return (
         <section id="home">
-            <div className="h-80 lg:h-[75vh] relative overflow-hidden flex items-end">
+            <div className="h-80 lg:h-[75vh] relative overflow-hidden flex items-end container mx-auto">
                 {/* Background Gambar dengan Clip Path Responsive (5% mobile, 20% desktop) */}
                 <motion.img
                     src="/images/hero.jpg"
@@ -87,21 +87,21 @@ export function HeroSection() {
                     >
                         <motion.span
                             variants={spanVariants}
-                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pl-60 lg:pr-12 bg-background"
+                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pr-12 bg-background"
                         >
                             Rooted
                         </motion.span>
 
                         <motion.span
                             variants={spanVariants}
-                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pl-60 lg:pr-12 bg-background"
+                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pr-12 bg-background"
                         >
                             In Indonesia,
                         </motion.span>
 
                         <motion.span
                             variants={spanVariants}
-                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pl-60 lg:pr-12 bg-background"
+                            className="inline-block text-2xl lg:text-7xl uppercase font-bold py-2 lg:py-4 px-4 lg:pr-12 bg-background"
                         >
                             Trusted Worldwide
                         </motion.span>

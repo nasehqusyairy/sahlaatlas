@@ -9,7 +9,19 @@ import {
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 
-function MenuCard() {
+const arr = [
+    'Menu 1',
+    'Menu 2',
+    'Menu 3',
+    'Menu 4',
+    'Menu 5'
+]
+
+type MenuCardProps = {
+    title: string
+}
+
+function MenuCard(props: MenuCardProps) {
     return (
         <Card className="relative mx-auto w-full max-w-sm pt-0">
             <div className="absolute inset-0 z-30 aspect-video bg-black/35" />
@@ -21,7 +33,7 @@ function MenuCard() {
             <CardHeader>
                 <CardAction>
                 </CardAction>
-                <CardTitle>Lorem Ipsum</CardTitle>
+                <CardTitle>{props.title}</CardTitle>
                 <CardDescription>
                     $ 5.00
                 </CardDescription>
@@ -44,9 +56,9 @@ function MenuCarousel() {
             </div>
 
             <CarouselContent className="-ml-1">
-                {Array.from({ length: 5 }).map((_, index) => (
+                {arr.map((item, index) => (
                     <CarouselItem key={index} className="basis-1/2 pl-1 lg:basis-1/4">
-                        <MenuCard />
+                        <MenuCard title={item} />
                     </CarouselItem>
                 ))}
             </CarouselContent>
