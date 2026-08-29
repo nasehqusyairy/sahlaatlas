@@ -1,4 +1,4 @@
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
 import {
     Carousel,
     CarouselContent,
@@ -7,7 +7,6 @@ import {
     CarouselPrevious,
 } from "~/components/ui/carousel"
 import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
 
 const arr = [
     'Menu 1',
@@ -31,8 +30,6 @@ function MenuCard(props: MenuCardProps) {
                 className="relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40"
             />
             <CardHeader>
-                <CardAction>
-                </CardAction>
                 <CardTitle>{props.title}</CardTitle>
                 <CardDescription>
                     $ 5.00
