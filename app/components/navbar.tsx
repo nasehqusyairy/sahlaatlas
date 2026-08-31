@@ -16,8 +16,8 @@ import {
 
 // Data item navbar terpusat
 const NAV_ITEMS = [
-    { label: "Home", href: "#home" },
-    { label: "About Us", href: "#about" },
+    { label: "Home", href: "/" },
+    { label: "About Us", href: "/about" },
     // {
     //     label: "Our Commodities",
     //     children: [
@@ -26,8 +26,8 @@ const NAV_ITEMS = [
     //         { label: "Tea", href: "#tea" },
     //     ],
     // },
-    { label: "Catalog", href: "#catalog" },
-    { label: "Blog", href: "#blog" },
+    { label: "Catalog", href: "/catalog" },
+    { label: "Blog", href: "/blog" },
 ];
 
 export function Navbar() {
