@@ -6,33 +6,14 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "~/components/ui/sidebar"
-import { FrameIcon, PieChartIcon, MapIcon } from "lucide-react"
+import { Text } from "lucide-react"
 import { Nav } from "./nav";
 
 const navitems = [
   {
-    name: "Design Engineering",
-    url: "#",
-    icon: (
-      <FrameIcon
-      />
-    ),
-  },
-  {
-    name: "Sales & Marketing",
-    url: "#",
-    icon: (
-      <PieChartIcon
-      />
-    ),
-  },
-  {
-    name: "Travel",
-    url: "#",
-    icon: (
-      <MapIcon
-      />
-    ),
+    name: "Articles",
+    url: "/admin/articles",
+    icon: <Text />,
   },
 ]
 

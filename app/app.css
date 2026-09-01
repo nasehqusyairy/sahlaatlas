@@ -9,7 +9,7 @@
 :root {
   --background: #f5f0eb;
   --foreground: #311509;
-  --card: #e6d7c8;
+  --card: #fff;
   --card-foreground: #311509;
   --popover: oklch(1 0 0);
   --popover-foreground: #311509;
@@ -42,7 +42,7 @@
 }
 
 .dark {
-  --background: #311509;
+  --background: oklch(0.153 0.006 107.1);
   --foreground: oklch(0.988 0.003 106.5);
   --card: oklch(0.228 0.013 107.4);
   --card-foreground: oklch(0.988 0.003 106.5);
@@ -208,5 +208,10 @@
     & code {
       @apply relative rounded bg-muted p-2 font-mono text-sm font-semibold text-foreground;
     }
+  }
+
+  [data-slot="sidebar-menu-button"].active,
+  [data-slot="sidebar-menu-button"].active:hover {
+    @apply bg-primary! text-primary-foreground!;
   }
 }

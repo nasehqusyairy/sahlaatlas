@@ -1,3 +1,4 @@
+import { NavLink } from "react-router";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -17,12 +18,12 @@ export type NavProps = {
 
 export function Nav({ items, label }: NavProps) {
   return (
-    <SidebarGroup className="">
+    <SidebarGroup>
       {label && <SidebarGroupLabel>{label}</SidebarGroupLabel>}
       <SidebarMenu>
         {items.map((item) => (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton render={<a href={item.url} />}>
+            <SidebarMenuButton render={<NavLink to={item.url} />}>
               {item.icon}
               <span>{item.name}</span>
             </SidebarMenuButton>
