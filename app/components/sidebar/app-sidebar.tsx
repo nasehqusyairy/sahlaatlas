@@ -1,4 +1,4 @@
-import { NavUser } from "~/components/nav-user"
+import { NavUser } from "~/components/sidebar/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -6,21 +6,9 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "~/components/ui/sidebar"
-import { Text } from "lucide-react"
-import { Nav } from "./nav";
-
-const navitems = [
-  {
-    name: "Articles",
-    url: "/admin/articles",
-    icon: <Text />,
-  },
-]
-
-const user = {
-  email: 'admin@example.com',
-  name: "Admin",
-}
+import { NavItems } from "./nav-items";
+import { MenuGroup } from "./menu-group";
+import { LogoutButton } from "./actions/logout-button";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -37,10 +25,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <Nav items={navitems} />
+        <MenuGroup label="Navigation">
+          <NavItems />
+        </MenuGroup>
+        <MenuGroup label="actions">
+          <LogoutButton />
+        </MenuGroup>
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

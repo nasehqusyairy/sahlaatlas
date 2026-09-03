@@ -8,5 +8,6 @@ export default [
     route('admin','routes/layouts/admin.tsx', [
         route('','routes/admin/dashboard.tsx'),
         route('articles','routes/admin/articles/index.tsx')
-    ])
+    ]),
+    route('/login','routes/login.tsx')
 ] satisfies RouteConfig;

@@ -1,11 +1,42 @@
-import { Outlet, useMatches, type UIMatch } from "react-router";
-import { AppSidebar } from "~/components/app-sidebar"
+import { Outlet, useMatches, type LoaderFunctionArgs, type MiddlewareFunction, type UIMatch } from "react-router";
+import { requireAuthMiddleware } from "~/.server/middlewares/auth";
+import { AppSidebar } from "~/components/sidebar/app-sidebar"
 import { Separator } from "~/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "~/components/ui/sidebar"
+import { redirect, type ActionFunctionArgs } from "react-router";
+import { createClient } from "~/.server/supabase";
+import { userContext } from "~/context";
+
+export const middleware: MiddlewareFunction[] = [
+  requireAuthMiddleware
+]
+
+// Asumsikan middleware proteksi sudah dipasang
+export async function loader({ context }: LoaderFunctionArgs) {
+  // Mengambil user dari context yang sudah diisi oleh middleware
+  const user = context.get(userContext);
+
+  return { user };
+}
+
+export type LoaderData = Awaited<ReturnType<typeof loader>>
+
+export async function action({ request }: ActionFunctionArgs) {
+  const { supabase, headers } = createClient(request);
+  const formData = await request.formData();
+
+  if (formData.get("intent") === "logout") {
+    await supabase.auth.signOut();
+    // Redirect ini akan langsung dipatuhi oleh fetcher dan membawa user ke halaman login
+    return redirect("/login", { headers });
+  }
+
+  return null;
+}
 
 export default function AdminLayout() {
 

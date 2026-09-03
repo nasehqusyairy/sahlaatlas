@@ -27,7 +27,7 @@ export async function loader(args: LoaderFunctionArgs) {
 
 export default function Articles(props: ComponentProps<typeof loader>) {
 
-    const [mode, setMode] = useState<'create' | 'update' | undefined>('create');
+    const [mode, setMode] = useState<'create' | 'update' | undefined>();
     const [isAboutToArchive, setIsAboutToArchive] = useState(false);
 
     const fetcher = useFetcher();
