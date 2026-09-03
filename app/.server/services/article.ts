@@ -56,7 +56,7 @@ export async function archiveArticle(supabase: SupabaseClient, id: string) {
 export async function restoreArticle(supabase: SupabaseClient, id: string) {
     const { error } = await supabase
         .from("articles")
-        .update({ deleted_at: null })
+        .update({ deleted_at: null, is_published: false })
         .eq("id", id);
 
     return error ? { error: error.message } : { success: true };

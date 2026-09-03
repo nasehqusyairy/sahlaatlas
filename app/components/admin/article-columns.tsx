@@ -5,17 +5,12 @@ import type { Article } from "~/models/article";
 import type { features } from "~/components/datatable";
 import { Link } from "react-router";
 
-type ColumnActions = {
+export const getArticleColumns = (arg: {
     onEdit: (article: Article) => void;
     onArchive: (article: Article) => void;
     onRestore: (article: Article) => void;
-};
-
-export const getArticleColumns = ({
-    onEdit,
-    onArchive,
-    onRestore,
-}: ColumnActions): ColumnDef<typeof features, Article>[] => [
+    isRestoring: boolean
+}): ColumnDef<typeof features, Article>[] => [
         {
             accessorKey: "cover",
             header: "Cover",
@@ -67,16 +62,16 @@ export const getArticleColumns = ({
                     <div className="flex gap-2">
                         {!isArchived ? (
                             <>
-                                <Button size="xs" variant="secondary" onClick={() => onEdit(article)}>
+                                <Button size="xs" variant="secondary" onClick={() => arg.onEdit(article)}>
                                     <Pencil /> Edit
                                 </Button>
-                                <Button size="xs" variant="destructive" onClick={() => onArchive(article)}>
+                                <Button size="xs" variant="destructive" onClick={() => arg.onArchive(article)}>
                                     <Archive /> Archive
                                 </Button>
                             </>
                         ) : (
-                            <Button size="xs" variant="outline" onClick={() => onRestore(article)}>
-                                <ArchiveRestore /> Restore
+                            <Button size="xs" variant="outline" disabled={arg.isRestoring} onClick={() => arg.onRestore(article)}>
+                                <ArchiveRestore /> {arg.isRestoring ? 'Restoring...' : 'Restore'}
                             </Button>
                         )}
                     </div>

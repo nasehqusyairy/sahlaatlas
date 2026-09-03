@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useFetcher, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import { Plus } from "lucide-react";
 import { DataTable } from "~/components/datatable";
@@ -11,6 +11,7 @@ import { createClient } from "~/.server/supabase";
 import { getArticles, archiveArticle, restoreArticle, upsertArticle } from "~/.server/services/article";
 import type { Article } from "~/models/article";
 import type { ComponentProps } from "~/models/route";
+import { toast } from "~/components/ui/toast";
 
 export const handle = {
     title: "Published Articles",
@@ -71,26 +72,35 @@ export default function Articles(props: ComponentProps<typeof loader>) {
         fetcher.submit(formData, {
             method: "post",
             encType: "multipart/form-data",
+        }).then(() => {
+            toast.add({
+                type: "success",
+                title: mode === "create" ? "Article created successfully" : "Article updated successfully",
+                description: `The article has been ${mode === "create" ? "created" : "updated"} successfully.`,
+            })
+        }).catch(e => {
+            toast.add({
+                type: "error",
+                title: "Error",
+                description: e.message || "An error occurred while processing your request.",
+            })
         });
     };
 
-    const columns = useMemo(
-        () =>
-            getArticleColumns({
-                onEdit: (article) => {
-                    setSelectedArticle(article);
-                    setMode("update");
-                },
-                onArchive: (article) => {
-                    setSelectedArticle(article);
-                    setIsAboutToArchive(true);
-                },
-                onRestore: (article) => {
-                    fetcher.submit({ intent: "restore", id: article.id }, { method: "post" });
-                },
-            }),
-        [fetcher]
-    );
+    const columns = getArticleColumns({
+        isRestoring: fetcher.state !== 'idle',
+        onEdit: (article) => {
+            setSelectedArticle(article);
+            setMode("update");
+        },
+        onArchive: (article) => {
+            setSelectedArticle(article);
+            setIsAboutToArchive(true);
+        },
+        onRestore: (article) => {
+            fetcher.submit({ intent: "restore", id: article.id }, { method: "post" });
+        },
+    })
 
     return (
         <>
@@ -128,6 +138,7 @@ export default function Articles(props: ComponentProps<typeof loader>) {
                         fetcher.submit({ intent: "archive", id: selectedArticle.id }, { method: "post" });
                     }
                 }}
+                isConfirming={fetcher.state !== 'idle'}
                 onAbort={() => {
                     setIsAboutToArchive(false);
                     setSelectedArticle(null);
