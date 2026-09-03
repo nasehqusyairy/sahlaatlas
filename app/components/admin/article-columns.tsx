@@ -1,9 +1,9 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { Archive, Pencil, ArchiveRestore, FileText } from "lucide-react";
+import { Archive, Pencil, ArchiveRestore } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { Badge } from "~/components/ui/badge";
 import type { Article } from "~/models/article";
 import type { features } from "~/components/datatable";
+import { Link } from "react-router";
 
 type ColumnActions = {
     onEdit: (article: Article) => void;
@@ -21,9 +21,10 @@ export const getArticleColumns = ({
             header: "Cover",
             cell: ({ row }) => (
                 <img
+                    loading="lazy"
                     src={row.original.cover}
                     alt={row.original.title}
-                    className="h-10 w-14 object-cover rounded-md border"
+                    className="h-10 aspect-video object-cover"
                 />
             ),
         },
@@ -31,11 +32,13 @@ export const getArticleColumns = ({
             accessorKey: "title",
             header: "Title",
             cell: ({ row }) => (
-                <div>
-                    <div className="font-semibold">{row.original.title}</div>
-                    <div className="text-xs text-muted-foreground">{row.original.slug}</div>
-                </div>
-            ),
+                <Link
+                    to={`/blogs/${row.original.slug}`}
+                    className="underline text-primary capitalize"
+                >
+                    {row.original.title}
+                </Link>
+            )
         },
         {
             accessorKey: "author",
@@ -51,19 +54,6 @@ export const getArticleColumns = ({
                     month: "short",
                     year: "numeric",
                 });
-            },
-        },
-        {
-            accessorKey: "deleted_at",
-            header: "Status",
-            cell: ({ row }) => {
-                const isArchived = row.original.deleted_at !== null;
-                const isPublished = row.original.is_published;
-                return (
-                    <Badge variant={isArchived ? "destructive" : isPublished ? "default" : "outline"}>
-                        {isArchived ? "Archived" : isPublished ? "Published" : "Draft"}
-                    </Badge>
-                );
             },
         },
         {

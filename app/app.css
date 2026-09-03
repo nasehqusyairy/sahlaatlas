@@ -211,7 +211,9 @@
   }
 
   [data-slot="sidebar-menu-button"].active,
-  [data-slot="sidebar-menu-button"].active:hover {
+  [data-slot="sidebar-menu-button"].active:hover,
+  [data-slot="sidebar-menu-sub-button"].active,
+  [data-slot="sidebar-menu-sub-button"].active:hover {
     @apply bg-primary! text-primary-foreground!;
   }
 }

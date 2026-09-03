@@ -13,12 +13,12 @@ import type { Article } from "~/models/article";
 import type { ComponentProps } from "~/models/route";
 
 export const handle = {
-    title: "Articles",
+    title: "Published Articles",
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const { supabase } = createClient(request);
-    const articles = await getArticles(supabase);
+    const articles = await getArticles(supabase, "published");
     return { articles };
 }
 

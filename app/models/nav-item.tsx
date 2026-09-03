@@ -2,8 +2,12 @@ import { Gauge, Text, type LucideIcon } from "lucide-react";
 
 export type NavItem = {
   label: string
-  url: string
+  url?: string
   icon: LucideIcon
+  children?: {
+    label: string
+    url: string
+  }[]
 }
 
 export const navitems: NavItem[] = [
@@ -14,7 +18,20 @@ export const navitems: NavItem[] = [
   },
   {
     label: "Articles",
-    url: "/admin/articles",
     icon: Text,
+    children: [
+      {
+        label: 'Published',
+        url: '/admin/articles'
+      },
+      {
+        label: 'Draft',
+        url: '/admin/articles/draft'
+      },
+      {
+        label: 'Archived',
+        url: '/admin/articles/archived'
+      },
+    ]
   },
 ]

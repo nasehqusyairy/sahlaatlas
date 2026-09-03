@@ -104,7 +104,7 @@ export function DataTable<TData extends RowData>({
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={columns.length} className="h-24 text-center">
+                                        <TableCell colSpan={columns.length} className="py-4 text-center">
                                             No results.
                                         </TableCell>
                                     </TableRow>

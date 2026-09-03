@@ -9,11 +9,36 @@ export function slugify(text: string) {
         .replace(/^-+|-+$/g, "");
 }
 
-export async function getArticles(supabase: SupabaseClient) {
-    const { data, error } = await supabase
-        .from("articles")
-        .select("*")
-        .order("created_at", { ascending: false });
+export type ArticleStatus = "published" | "draft" | "archived" | "all";
+
+export async function getArticles(
+    supabase: SupabaseClient,
+    status: ArticleStatus = "published"
+) {
+    let query = supabase.from("articles").select("*");
+
+    switch (status) {
+        case "archived":
+            // Mengambil artikel yang sudah di-archive (soft delete)
+            query = query.not("deleted_at", "is", null);
+            break;
+
+        case "draft":
+            // Mengambil artikel yang belum di-archive DAN belum di-publish
+            query = query.is("deleted_at", null).eq("is_published", false);
+            break;
+
+        case "published":
+            // Mengambil artikel yang belum di-archive DAN sudah di-publish
+            query = query.is("deleted_at", null).eq("is_published", true);
+            break;
+
+        case "all":
+            // Tidak menambahkan filter status (diambil semua untuk dashboard admin)
+            break;
+    }
+
+    const { data, error } = await query.order("created_at", { ascending: false });
 
     if (error) throw new Response(error.message, { status: 500 });
     return data;
