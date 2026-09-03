@@ -81,19 +81,16 @@ export function CommoditySection() {
                                         <h3 className="text-xl font-semibold text-foreground mb-1">
                                             {item.title}
                                         </h3>
-                                        <p className="text-muted-foreground leading-relaxed text-sm lg:text-base">
+                                        <p className="text-muted-foreground leading-relaxed text-sm lg:text-base mb-4">
                                             {item.description}
                                         </p>
+                                        <Button variant="outline" size="lg" className={'w-full lg:w-auto'}>
+                                            See More
+                                        </Button>
                                     </div>
                                 </motion.li>
                             ))}
                         </ol>
-
-                        <motion.div variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }} className="w-full lg:w-auto">
-                            <Button variant="outline" size="lg" className={'w-full lg:w-auto'}>
-                                See More
-                            </Button>
-                        </motion.div>
                     </motion.div>
 
                 </motion.div>

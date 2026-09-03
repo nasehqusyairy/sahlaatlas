@@ -16,16 +16,15 @@ export function LogoutButton() {
         <SidebarMenuButton
             onClick={logout}
             disabled={isLoggingOut}
-            className="w-full flex items-center justify-between"
+            className="flex items-center justify-between"
         >
             <div className="flex items-center gap-2">
-                <LogOut className="size-4" />
+                <LogOut />
                 <span>Log Out</span>
             </div>
 
-            {/* Spinner indikator loading ditaruh di sebelah kanan */}
             {isLoggingOut && (
-                <Loader2 className="size-4 animate-spin text-muted-foreground ml-auto" />
+                <Loader2 className="animate-spin" />
             )}
         </SidebarMenuButton>
     )

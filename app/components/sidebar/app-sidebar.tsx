@@ -4,11 +4,14 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenuButton,
   SidebarRail,
 } from "~/components/ui/sidebar"
 import { NavItems } from "./nav-items";
 import { MenuGroup } from "./menu-group";
 import { LogoutButton } from "./actions/logout-button";
+import { Globe } from "lucide-react";
+import { Link } from "react-router";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -29,7 +32,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <NavItems />
         </MenuGroup>
         <MenuGroup label="actions">
+
+          <SidebarMenuButton render={<Link to={'/'} target="_blank" />}>
+            <Globe />
+            Landing Page
+          </SidebarMenuButton>
+
           <LogoutButton />
+
         </MenuGroup>
       </SidebarContent>
       <SidebarFooter>
