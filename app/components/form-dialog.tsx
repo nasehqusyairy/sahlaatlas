@@ -23,25 +23,24 @@ export type FormDialogProps = {
 export function FormDialog(props: FormDialogProps) {
     return (
         <Dialog open={props.isOpen} onOpenChange={props.onClose}>
-            <form onSubmit={(e) => {
+
+            <DialogContent render={<form onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
                 props.onSubmit(formData);
-            }}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className={'capitalize'}>{props.title}</DialogTitle>
-                        <DialogDescription>
-                            {props.description}
-                        </DialogDescription>
-                    </DialogHeader>
-                    {props.children}
-                    <DialogFooter>
-                        <DialogClose render={<Button variant="outline">Cancel</Button>} onClick={props.onClose} />
-                        <Button type="submit" disabled={props.isSubmitting}>{props.isSubmitting ? 'Saving...' : 'Save'}</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </form>
+            }} />}>
+                <DialogHeader>
+                    <DialogTitle className={'capitalize'}>{props.title}</DialogTitle>
+                    <DialogDescription>
+                        {props.description}
+                    </DialogDescription>
+                </DialogHeader>
+                {props.children}
+                <DialogFooter>
+                    <DialogClose render={<Button variant="outline">Cancel</Button>} onClick={props.onClose} />
+                    <Button type="submit" disabled={props.isSubmitting}>{props.isSubmitting ? 'Saving...' : 'Save'}</Button>
+                </DialogFooter>
+            </DialogContent>
         </Dialog>
     )
 }
