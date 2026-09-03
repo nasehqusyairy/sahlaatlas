@@ -58,7 +58,7 @@ export default function Articles(props: ComponentProps<typeof loader>) {
         }
     }, [fetcher.state, fetcher.data]);
 
-    const handleSubmit = (formData: FormData) => {
+    const submitForm = (formData: FormData) => {
         formData.append("intent", mode || "create");
         const isPublished = formData.get("is_published") === "on";
         formData.set("is_published", String(isPublished));
@@ -76,16 +76,45 @@ export default function Articles(props: ComponentProps<typeof loader>) {
             toast.add({
                 type: "success",
                 title: mode === "create" ? "Article created successfully" : "Article updated successfully",
-                description: `The article has been ${mode === "create" ? "created" : "updated"} successfully.`,
             })
         }).catch(e => {
             toast.add({
                 type: "error",
-                title: "Error",
-                description: e.message || "An error occurred while processing your request.",
+                title: e.message || "An error occurred while processing your request.",
             })
         });
     };
+
+    const archiveItem = () => {
+        if (selectedArticle) {
+            fetcher.submit({ intent: "archive", id: selectedArticle.id }, { method: "post" }).then(() => {
+                toast.add({
+                    type: "success",
+                    title: "Article archived successfully",
+                })
+            }).catch(e => {
+                toast.add({
+                    type: "error",
+                    title: e.message || "An error occurred while processing your request.",
+                })
+            });
+        }
+    }
+
+    const restoreItem = (article: Article) => {
+        fetcher.submit({ intent: "restore", id: article.id }, { method: "post" })
+            .then(() => {
+                toast.add({
+                    type: "success",
+                    title: "Article restored and set as draft",
+                })
+            }).catch(e => {
+                toast.add({
+                    type: "error",
+                    title: e.message || "An error occurred while processing your request.",
+                })
+            });
+    }
 
     const columns = getArticleColumns({
         isRestoring: fetcher.state !== 'idle',
@@ -97,9 +126,7 @@ export default function Articles(props: ComponentProps<typeof loader>) {
             setSelectedArticle(article);
             setIsAboutToArchive(true);
         },
-        onRestore: (article) => {
-            fetcher.submit({ intent: "restore", id: article.id }, { method: "post" });
-        },
+        onRestore: restoreItem
     })
 
     return (
@@ -122,7 +149,7 @@ export default function Articles(props: ComponentProps<typeof loader>) {
                 title={`${mode} article`}
                 description={mode === "create" ? "Create a new article" : "Update an existing article"}
                 isSubmitting={fetcher.state === "submitting"}
-                onSubmit={handleSubmit}
+                onSubmit={submitForm}
                 onClose={() => {
                     setMode(undefined);
                     setSelectedArticle(null);
@@ -133,11 +160,7 @@ export default function Articles(props: ComponentProps<typeof loader>) {
 
             <ConfirmDialog
                 isOpen={isAboutToArchive}
-                onConfirm={() => {
-                    if (selectedArticle) {
-                        fetcher.submit({ intent: "archive", id: selectedArticle.id }, { method: "post" });
-                    }
-                }}
+                onConfirm={archiveItem}
                 isConfirming={fetcher.state !== 'idle'}
                 onAbort={() => {
                     setIsAboutToArchive(false);

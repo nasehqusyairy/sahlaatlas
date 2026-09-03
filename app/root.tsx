@@ -5,11 +5,14 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Toaster } from "./components/ui/toast";
+import { Progress } from "./components/ui/progress";
+import { useEffect, useState } from "react";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -25,6 +28,19 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const [progressValue, setProgressValue] = useState(0);
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    setProgressValue(0)
+    if (navigation.state !== 'idle') {
+      setProgressValue(25)
+      setTimeout(() => {
+        setProgressValue(80)
+      }, 200);
+    }
+  }, [navigation.state]);
+
   return (
     <html lang="en">
       <head>
@@ -44,6 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        {navigation.state !== 'idle' && <Progress value={progressValue} className={'fixed top-0 z-60 w-full'} />}
         {children}
         <Toaster />
         <ScrollRestoration />
