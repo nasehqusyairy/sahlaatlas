@@ -1,15 +1,20 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-
-export function slugify(text: string) {
-    return text
-        .toLowerCase()
-        .trim()
-        .replace(/[^\w\s-]/g, "")
-        .replace(/[\s_-]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-}
+import { archiveRecord, restoreRecord, slugify, uploadStorageFile } from "./base";
 
 export type ArticleStatus = "published" | "draft" | "archived" | "all";
+
+export type Article = {
+    id: string;
+    title: string;
+    slug: string;
+    author: string;
+    cover: string;
+    content: string;
+    is_published: boolean;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+};
 
 export async function getArticles(
     supabase: SupabaseClient,
@@ -19,47 +24,35 @@ export async function getArticles(
 
     switch (status) {
         case "archived":
-            // Mengambil artikel yang sudah di-archive (soft delete)
             query = query.not("deleted_at", "is", null);
             break;
 
         case "draft":
-            // Mengambil artikel yang belum di-archive DAN belum di-publish
             query = query.is("deleted_at", null).eq("is_published", false);
             break;
 
         case "published":
-            // Mengambil artikel yang belum di-archive DAN sudah di-publish
             query = query.is("deleted_at", null).eq("is_published", true);
             break;
 
         case "all":
-            // Tidak menambahkan filter status (diambil semua untuk dashboard admin)
             break;
     }
 
     const { data, error } = await query.order("created_at", { ascending: false });
 
     if (error) throw new Response(error.message, { status: 500 });
-    return data;
+    return data as Article[];
 }
 
+// 1. Menggunakan Helper Generik archiveRecord
 export async function archiveArticle(supabase: SupabaseClient, id: string) {
-    const { error } = await supabase
-        .from("articles")
-        .update({ deleted_at: new Date().toISOString() })
-        .eq("id", id);
-
-    return error ? { error: error.message } : { success: true };
+    return archiveRecord(supabase, "articles", id);
 }
 
+// 2. Menggunakan Helper Generik restoreRecord
 export async function restoreArticle(supabase: SupabaseClient, id: string) {
-    const { error } = await supabase
-        .from("articles")
-        .update({ deleted_at: null, is_published: false })
-        .eq("id", id);
-
-    return error ? { error: error.message } : { success: true };
+    return restoreRecord(supabase, "articles", id, { is_published: false });
 }
 
 export async function upsertArticle(
@@ -72,42 +65,24 @@ export async function upsertArticle(
     const author = formData.get("author") as string;
     const is_published = formData.get("is_published") === "true";
 
-
     const coverFile = formData.get("cover") as File | null;
-    const contentFile = formData.get("content") as File | null
+    const contentFile = formData.get("content") as File | null;
 
     let coverUrl = formData.get("existing_cover") as string;
     let contentUrl = formData.get("existing_content") as string;
 
-    const timestamp = Date.now();
-
-    // 1. Upload Cover Image jika ada file baru
+    // 3. Menggunakan Helper Generik uploadStorageFile untuk Cover Image
     if (coverFile && coverFile.size > 0) {
-        const ext = coverFile.name.split(".").pop();
-        const path = `covers/${timestamp}.${ext}`;
-
-        const { error: coverErr } = await supabase.storage
-            .from("article_assets")
-            .upload(path, coverFile, { upsert: true });
-
-        if (coverErr) return { error: `Cover Upload Error: ${coverErr.message}` };
-
-        const { data } = supabase.storage.from("article_assets").getPublicUrl(path);
-        coverUrl = data.publicUrl;
+        const { url, error } = await uploadStorageFile(supabase, "article_assets", "covers", coverFile);
+        if (error) return { error: `Cover Upload Error: ${error}` };
+        if (url) coverUrl = url;
     }
 
-    // 2. Upload DOCX Content File jika ada file baru
+    // 4. Menggunakan Helper Generik uploadStorageFile untuk DOCX File
     if (contentFile && contentFile.size > 0) {
-        const path = `docs/${timestamp}_${contentFile.name}`;
-
-        const { error: docErr } = await supabase.storage
-            .from("article_assets")
-            .upload(path, contentFile, { upsert: true });
-
-        if (docErr) return { error: `Content Upload Error: ${docErr.message}` };
-
-        const { data } = supabase.storage.from("article_assets").getPublicUrl(path);
-        contentUrl = data.publicUrl;
+        const { url, error } = await uploadStorageFile(supabase, "article_assets", "docs", contentFile);
+        if (error) return { error: `Content Upload Error: ${error}` };
+        if (url) contentUrl = url;
     }
 
     if (intent === "create" && (!coverUrl || !contentUrl)) {
@@ -116,7 +91,7 @@ export async function upsertArticle(
 
     const payload = {
         title,
-        slug: slugify(title),
+        slug: slugify(title), // Tetap pakai slugify yang disentralisasi
         author,
         cover: coverUrl,
         content: contentUrl,

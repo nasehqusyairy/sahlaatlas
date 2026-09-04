@@ -5,22 +5,22 @@ import { DataTable } from "~/components/datatable";
 import { Button } from "~/components/ui/button";
 import { FormDialog } from "~/components/form-dialog";
 import { ConfirmDialog } from "~/components/confirm-dialog";
-import { ArticleForm } from "~/components/admin/article-form";
-import { getArticleColumns } from "~/components/admin/article-columns";
+import { CatalogForm } from "~/components/admin/catalog-form";
+import { getCatalogColumns } from "~/components/admin/catalog-columns";
 import { createClient } from "~/.server/supabase";
-import { getArticles, archiveArticle, restoreArticle, upsertArticle } from "~/.server/services/article";
-import type { Article } from "~/models/article";
+import { getCatalogs, archiveCatalog, restoreCatalog, upsertCatalog } from "~/.server/services/catalog";
+import type { Catalog } from "~/models/catalog";
 import type { ComponentProps } from "~/models/route";
 import { toast } from "~/components/ui/toast";
 
 export const handle = {
-    title: "Published Articles",
+    title: "Available Catalogs",
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const { supabase } = createClient(request);
-    const articles = await getArticles(supabase, "published");
-    return { articles };
+    const catalogs = await getCatalogs(supabase, "active");
+    return { catalogs };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -29,22 +29,22 @@ export async function action({ request }: ActionFunctionArgs) {
     const intent = formData.get("intent") as string;
 
     if (intent === "archive") {
-        return archiveArticle(supabase, formData.get("id") as string);
+        return archiveCatalog(supabase, formData.get("id") as string);
     }
 
     if (intent === "restore") {
-        return restoreArticle(supabase, formData.get("id") as string);
+        return restoreCatalog(supabase, formData.get("id") as string);
     }
 
     if (intent === "create" || intent === "update") {
-        return upsertArticle(supabase, formData, intent);
+        return upsertCatalog(supabase, formData, intent);
     }
 
     return null;
 }
 
-export default function Articles(props: ComponentProps<typeof loader>) {
-    const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+export default function Catalogs(props: ComponentProps<typeof loader>) {
+    const [selectedCatalog, setSelectedCatalog] = useState<Catalog | null>(null);
     const [mode, setMode] = useState<"create" | "update" | undefined>();
     const [isAboutToArchive, setIsAboutToArchive] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -64,104 +64,100 @@ export default function Articles(props: ComponentProps<typeof loader>) {
                     title: successMessage || "Operation completed successfully",
                 })
                 setMode(undefined);
-                setSelectedArticle(null);
+                setSelectedCatalog(null);
                 setIsAboutToArchive(false);
             }
         }
-
     }, [fetcher.state, fetcher.data]);
 
     const submitForm = (formData: FormData) => {
         formData.append("intent", mode || "create");
-        const isPublished = formData.get("is_published") === "on";
-        formData.set("is_published", String(isPublished));
 
-        if (selectedArticle) {
-            formData.append("id", selectedArticle.id);
-            formData.append("existing_cover", selectedArticle.cover);
-            formData.append("existing_content", selectedArticle.content);
+        if (selectedCatalog) {
+            formData.append("id", selectedCatalog.id);
+            formData.append("existing_img", selectedCatalog.img || "");
         }
 
         fetcher.submit(formData, {
             method: "post",
             encType: "multipart/form-data",
         }).then(() => {
-            setSuccessMessage(mode === "create" ? "Article created successfully" : "Article updated successfully");
+            setSuccessMessage(mode === "create" ? "Catalog item created successfully" : "Catalog item updated successfully");
         })
     };
 
     const archiveItem = () => {
-        if (selectedArticle) {
-            fetcher.submit({ intent: "archive", id: selectedArticle.id }, { method: "post" })
+        if (selectedCatalog) {
+            fetcher.submit({ intent: "archive", id: selectedCatalog.id }, { method: "post" })
                 .then(() => {
-                    setSuccessMessage("Article archived successfully");
+                    setSuccessMessage("Catalog item archived successfully");
                 })
         }
-    }
+    };
 
-    const restoreItem = (article: Article) => {
-        fetcher.submit({ intent: "restore", id: article.id }, { method: "post" })
+    const restoreItem = (catalog: Catalog) => {
+        fetcher.submit({ intent: "restore", id: catalog.id }, { method: "post" })
             .then(() => {
-                setSuccessMessage("Article restored successfully");
+                setSuccessMessage("Catalog item restored successfully");
             })
-    }
+    };
 
-    const columns = getArticleColumns({
-        isRestoring: fetcher.state !== 'idle',
-        onEdit: (article) => {
-            setSelectedArticle(article);
+    const columns = getCatalogColumns({
+        isRestoring: fetcher.state !== "idle",
+        onEdit: (catalog) => {
+            setSelectedCatalog(catalog);
             setMode("update");
         },
-        onArchive: (article) => {
-            setSelectedArticle(article);
+        onArchive: (catalog) => {
+            setSelectedCatalog(catalog);
             setIsAboutToArchive(true);
         },
-        onRestore: restoreItem
-    })
+        onRestore: restoreItem,
+    });
 
     return (
         <>
             <div className="mb-4 grid lg:flex gap-2">
                 <Button
                     onClick={() => {
-                        setSelectedArticle(null);
+                        setSelectedCatalog(null);
                         setMode("create");
                     }}
                 >
-                    <Plus /> New Article
+                    <Plus /> New Item
                 </Button>
             </div>
 
-            <DataTable columns={columns} data={props.loaderData.articles} />
+            <DataTable columns={columns} data={props.loaderData.catalogs} />
 
             <FormDialog
                 isOpen={!!mode}
-                title={`${mode} article`}
-                description={mode === "create" ? "Create a new article" : "Update an existing article"}
+                title={`${mode === "create" ? "Create" : "Edit"} catalog item`}
+                description={mode === "create" ? "Add a new item to your catalog" : "Update an existing catalog item"}
                 isSubmitting={fetcher.state === "submitting"}
                 onSubmit={submitForm}
                 onClose={() => {
                     setMode(undefined);
-                    setSelectedArticle(null);
+                    setSelectedCatalog(null);
                 }}
             >
-                <ArticleForm article={selectedArticle} errorMessage={fetcher.data?.error} />
+                <CatalogForm catalog={selectedCatalog} errorMessage={fetcher.data?.error} />
             </FormDialog>
 
             <ConfirmDialog
                 isOpen={isAboutToArchive}
                 onConfirm={archiveItem}
-                isConfirming={fetcher.state !== 'idle'}
+                isConfirming={fetcher.state !== "idle"}
                 onAbort={() => {
                     setIsAboutToArchive(false);
-                    setSelectedArticle(null);
+                    setSelectedCatalog(null);
                 }}
                 onClose={() => {
                     setIsAboutToArchive(false);
-                    setSelectedArticle(null);
+                    setSelectedCatalog(null);
                 }}
-                title="Are you sure you want to archive this article?"
-                description="This will set the article as archived. You can restore it later."
+                title="Are you sure you want to archive this item?"
+                description="This will set the item as archived. You can restore it later."
             />
         </>
     );

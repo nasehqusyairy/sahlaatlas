@@ -1,4 +1,4 @@
-import { Gauge, Text, type LucideIcon } from "lucide-react";
+import { BookOpen, Gauge, Text, type LucideIcon } from "lucide-react";
 
 export type NavItem = {
   label: string
@@ -31,6 +31,20 @@ export const navitems: NavItem[] = [
       {
         label: 'Archived',
         url: '/admin/articles/archived'
+      },
+    ]
+  },
+  {
+    label: "Catalogs",
+    icon: BookOpen,
+    children: [
+      {
+        label: 'Available',
+        url: '/admin/catalogs'
+      },
+      {
+        label: 'Archived',
+        url: '/admin/catalogs/archived'
       },
     ]
   },
