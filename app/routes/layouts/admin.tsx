@@ -1,4 +1,4 @@
-import { Outlet, useMatches, type LoaderFunctionArgs, type MiddlewareFunction, type UIMatch } from "react-router";
+import { Outlet, useMatches, type LoaderFunctionArgs, type MetaFunction, type MiddlewareFunction, type UIMatch } from "react-router";
 import { requireAuthMiddleware } from "~/.server/middlewares/auth";
 import { AppSidebar } from "~/components/sidebar/app-sidebar"
 import { Separator } from "~/components/ui/separator"
@@ -10,6 +10,14 @@ import {
 import { redirect, type ActionFunctionArgs } from "react-router";
 import { createClient } from "~/.server/supabase";
 import { userContext } from "~/context";
+
+export const meta: MetaFunction = () => {
+  return [
+    {
+      title: 'Sahla Atlas Export | Admin'
+    }
+  ]
+}
 
 export const middleware: MiddlewareFunction[] = [
   requireAuthMiddleware
