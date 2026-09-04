@@ -1,15 +1,15 @@
-import type { Catalog } from "~/models/catalog";
+import type { Product } from "~/models/product";
 import { Field, FieldGroup } from "../ui/field";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 
-type CatalogFormProps = {
-    catalog?: Catalog | null;
+type ProductFormProps = {
+    product?: Product | null;
     errorMessage?: string;
 };
 
-export function CatalogForm({ catalog, errorMessage }: CatalogFormProps) {
+export function ProductForm({ product, errorMessage }: ProductFormProps) {
     return (
         <FieldGroup className="gap-4 py-2">
             {errorMessage && (
@@ -24,7 +24,7 @@ export function CatalogForm({ catalog, errorMessage }: CatalogFormProps) {
                 <Input
                     id="title"
                     name="title"
-                    defaultValue={catalog?.title}
+                    defaultValue={product?.title}
                     required
                 />
             </Field>
@@ -35,7 +35,7 @@ export function CatalogForm({ catalog, errorMessage }: CatalogFormProps) {
                 <Textarea
                     id="description"
                     name="description"
-                    defaultValue={catalog?.description ?? ""}
+                    defaultValue={product?.description ?? ""}
                     rows={3}
                 />
             </Field> */}
@@ -49,7 +49,7 @@ export function CatalogForm({ catalog, errorMessage }: CatalogFormProps) {
                     type="number"
                     min="0"
                     step="1000"
-                    defaultValue={catalog?.price ?? 0}
+                    defaultValue={product?.price ?? 0}
                     required
                 />
             </Field>
@@ -57,10 +57,10 @@ export function CatalogForm({ catalog, errorMessage }: CatalogFormProps) {
             {/* Field Image */}
             <Field>
                 <Label htmlFor="img">Product Image</Label>
-                {catalog?.img && (
+                {product?.img && (
                     <div className="mb-2">
                         <img
-                            src={catalog.img}
+                            src={product.img}
                             alt="Current Product"
                             className="h-16 w-16 object-cover rounded border"
                         />
@@ -71,7 +71,7 @@ export function CatalogForm({ catalog, errorMessage }: CatalogFormProps) {
                     name="img"
                     type="file"
                     accept="image/*"
-                    required={!catalog?.img}
+                    required={!product?.img}
                 />
             </Field>
         </FieldGroup>

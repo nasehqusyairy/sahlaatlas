@@ -15,7 +15,7 @@ import { Link } from "react-router";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
         <div
           className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground flex items-center gap-2"

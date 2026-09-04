@@ -1,17 +1,17 @@
 import type { LoaderFunctionArgs } from "react-router";
-import { getCatalogs } from "~/.server/services/catalog";
+import { getProducts } from "~/.server/services/product";
 import { createClient } from "~/.server/supabase";
-import Catalogs, { action } from "./catalogs";
+import Products, { action } from "./products";
 
 export const handle = {
-    title: "Archived Catalogs",
+    title: "Archived Products",
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const { supabase } = createClient(request);
-    const catalogs = await getCatalogs(supabase, "archived");
-    return { catalogs };
+    const products = await getProducts(supabase, "archived");
+    return { products };
 }
 
 export { action }
-export default Catalogs
+export default Products

@@ -12,8 +12,8 @@ export default [
         route('articles/draft', 'routes/admin/articles-draft.tsx'),
         route('articles/archived', 'routes/admin/articles-archived.tsx'),
 
-        route('catalogs', 'routes/admin/catalogs.tsx'),
-        route('catalogs/archived', 'routes/admin/catalogs-archived.tsx'),
+        route('products', 'routes/admin/products.tsx'),
+        route('products/archived', 'routes/admin/products-archived.tsx'),
     ]),
     route('/login', 'routes/login.tsx')
 ] satisfies RouteConfig;

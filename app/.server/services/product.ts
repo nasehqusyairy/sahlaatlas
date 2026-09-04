@@ -1,9 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { archiveRecord, restoreRecord, uploadStorageFile } from "./base";
 
-export type CatalogStatus = "active" | "archived" | "all";
+export type ProductStatus = "active" | "archived" | "all";
 
-export type Catalog = {
+export type Product = {
     id: string;
     title: string;
     description: string | null;
@@ -15,13 +15,13 @@ export type Catalog = {
     deleted_at: string | null;
 };
 
-export async function getCatalogs(
+export async function getProducts(
     supabase: SupabaseClient,
-    status: CatalogStatus = "active"
+    status: ProductStatus = "active"
 ) {
-    let query = supabase.from("catalogs").select(`
+    let query = supabase.from("products").select(`
         *,
-        catalog_discounts (
+        product_discount (
             discounts (*)
         )
     `);
@@ -42,15 +42,15 @@ export async function getCatalogs(
     return data;
 }
 
-export async function archiveCatalog(supabase: SupabaseClient, id: string) {
-    return archiveRecord(supabase, "catalogs", id);
+export async function archiveProduct(supabase: SupabaseClient, id: string) {
+    return archiveRecord(supabase, "products", id);
 }
 
-export async function restoreCatalog(supabase: SupabaseClient, id: string) {
-    return restoreRecord(supabase, "catalogs", id);
+export async function restoreProduct(supabase: SupabaseClient, id: string) {
+    return restoreRecord(supabase, "products", id);
 }
 
-export async function upsertCatalog(
+export async function upsertProduct(
     supabase: SupabaseClient,
     formData: FormData,
     intent: "create" | "update"
@@ -65,13 +65,13 @@ export async function upsertCatalog(
     let imgUrl = formData.get("existing_img") as string;
 
     if (imgFile && imgFile.size > 0) {
-        const { url, error } = await uploadStorageFile(supabase, "catalog_assets", "images", imgFile);
+        const { url, error } = await uploadStorageFile(supabase, "product_assets", "images", imgFile);
         if (error) return { error: `Image Upload Error: ${error}` };
         if (url) imgUrl = url;
     }
 
     if (intent === "create" && !imgUrl) {
-        return { error: "Gambar katalog wajib diisi." };
+        return { error: "Gambar produk wajib diisi." };
     }
 
     const payload = {
@@ -84,10 +84,10 @@ export async function upsertCatalog(
     };
 
     if (intent === "create") {
-        const { error } = await supabase.from("catalogs").insert([payload]);
+        const { error } = await supabase.from("products").insert([payload]);
         if (error) return { error: error.message };
     } else {
-        const { error } = await supabase.from("catalogs").update(payload).eq("id", id);
+        const { error } = await supabase.from("products").update(payload).eq("id", id);
         if (error) return { error: error.message };
     }
 

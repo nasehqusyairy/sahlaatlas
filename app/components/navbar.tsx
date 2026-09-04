@@ -26,7 +26,7 @@ const NAV_ITEMS = [
     //         { label: "Tea", href: "#tea" },
     //     ],
     // },
-    { label: "Catalog", href: "/catalog" },
+    { label: "Product", href: "/product" },
     { label: "Blog", href: "/blog" },
 ];
 

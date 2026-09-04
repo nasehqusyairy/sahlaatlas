@@ -1,15 +1,15 @@
 import type { ColumnDef } from "@tanstack/react-table";
 import { Archive, Pencil, ArchiveRestore } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import type { Catalog } from "~/models/catalog";
+import type { Product } from "~/models/product";
 import type { features } from "~/components/datatable";
 
-export const getCatalogColumns = (arg: {
-    onEdit: (catalog: Catalog) => void;
-    onArchive: (catalog: Catalog) => void;
-    onRestore: (catalog: Catalog) => void;
+export const getProductColumns = (arg: {
+    onEdit: (product: Product) => void;
+    onArchive: (product: Product) => void;
+    onRestore: (product: Product) => void;
     isRestoring: boolean;
-}): ColumnDef<typeof features, Catalog>[] => [
+}): ColumnDef<typeof features, Product>[] => [
         {
             accessorKey: "img",
             header: "Image",
@@ -53,37 +53,25 @@ export const getCatalogColumns = (arg: {
             },
         },
         {
-            accessorKey: "updated_at",
-            header: "Last Update",
-            cell: ({ row }) => {
-                const date = new Date(row.original.updated_at);
-                return date.toLocaleDateString("id-ID", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                });
-            },
-        },
-        {
             id: "actions",
             header: "Actions",
             cell: ({ row }) => {
-                const catalog = row.original;
-                const isArchived = catalog.deleted_at !== null;
+                const product = row.original;
+                const isArchived = product.deleted_at !== null;
 
                 return (
                     <div className="flex gap-2">
                         {!isArchived ? (
                             <>
-                                <Button size="xs" variant="secondary" onClick={() => arg.onEdit(catalog)}>
+                                <Button size="xs" variant="secondary" onClick={() => arg.onEdit(product)}>
                                     <Pencil /> Edit
                                 </Button>
-                                <Button size="xs" variant="destructive" onClick={() => arg.onArchive(catalog)}>
+                                <Button size="xs" variant="destructive" onClick={() => arg.onArchive(product)}>
                                     <Archive /> Archive
                                 </Button>
                             </>
                         ) : (
-                            <Button size="xs" variant="outline" disabled={arg.isRestoring} onClick={() => arg.onRestore(catalog)}>
+                            <Button size="xs" variant="outline" disabled={arg.isRestoring} onClick={() => arg.onRestore(product)}>
                                 <ArchiveRestore /> {arg.isRestoring ? "Restoring..." : "Restore"}
                             </Button>
                         )}

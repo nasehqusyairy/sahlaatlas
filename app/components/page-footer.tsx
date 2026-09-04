@@ -27,7 +27,7 @@ export function PageFooter() {
                         <ul className="space-y-2 text-sm opacity-80">
                             <li><a href="#" className="hover:opacity-100 hover:underline transition-all">Home</a></li>
                             <li><a href="#products" className="hover:opacity-100 hover:underline transition-all">About</a></li>
-                            <li><a href="#about" className="hover:opacity-100 hover:underline transition-all">Catalog</a></li>
+                            <li><a href="#about" className="hover:opacity-100 hover:underline transition-all">Product</a></li>
                             <li><a href="#about" className="hover:opacity-100 hover:underline transition-all">Blog</a></li>
                         </ul>
                     </div>

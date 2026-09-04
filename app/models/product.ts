@@ -1,6 +1,6 @@
 import type { Discount } from "./discount";
 
-export type Catalog = {
+export type Product = {
     id: string;
     title: string;
     description: string;

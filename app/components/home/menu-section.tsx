@@ -76,7 +76,7 @@ export function MenuSection() {
         <section id="menu" className="py-4 bg-primary">
             <div className="container mx-auto p-4">
                 <div className="mb-4 text-primary-foreground">
-                    <h2 className="text-2xl lg:text-4xl font-bold">Catalog</h2>
+                    <h2 className="text-2xl lg:text-4xl font-bold">Product</h2>
                     <p>Lorem ipsum dolor sit amet</p>
                 </div>
                 <MenuCarousel />

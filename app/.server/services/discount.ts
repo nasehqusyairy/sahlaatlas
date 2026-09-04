@@ -58,7 +58,7 @@ export async function upsertDiscount(
     const value = parseFloat(formData.get("value") as string);
     const start_at = formData.get("start_at") as string;
     const end_at = formData.get("end_at") as string;
-    const catalogIds = formData.getAll("catalog_ids") as string[]; // Array catalog ID untuk relasi Many-to-Many
+    const productIds = formData.getAll("product_ids") as string[];
 
     const payload = {
         title,
@@ -81,21 +81,21 @@ export async function upsertDiscount(
         if (error) return { error: error.message };
     }
 
-    // Mengelola Relasi Many-to-Many pada tabel catalog_discounts
-    if (catalogIds && catalogIds.length > 0) {
+    // Mengelola Relasi Many-to-Many pada tabel product_discounts
+    if (productIds && productIds.length > 0) {
         // Hapus relasi lama jika sedang update
         if (intent === "update") {
-            await supabase.from("catalog_discounts").delete().eq("discount_id", discountId);
+            await supabase.from("product_discounts").delete().eq("discount_id", discountId);
         }
 
         // Insert relasi baru
-        const relations = catalogIds.map((catalog_id) => ({
-            catalog_id,
+        const relations = productIds.map((product_id) => ({
+            product_id,
             discount_id: discountId,
         }));
 
-        const { error: relErr } = await supabase.from("catalog_discounts").insert(relations);
-        if (relErr) return { error: `Gagal memperbarui relasi katalog: ${relErr.message}` };
+        const { error: relErr } = await supabase.from("product_discounts").insert(relations);
+        if (relErr) return { error: `Gagal memperbarui relasi produk: ${relErr.message}` };
     }
 
     return { success: true };

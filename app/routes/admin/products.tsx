@@ -5,22 +5,23 @@ import { DataTable } from "~/components/datatable";
 import { Button } from "~/components/ui/button";
 import { FormDialog } from "~/components/form-dialog";
 import { ConfirmDialog } from "~/components/confirm-dialog";
-import { CatalogForm } from "~/components/admin/catalog-form";
-import { getCatalogColumns } from "~/components/admin/catalog-columns";
+import { ProductForm } from "~/components/admin/product-form";
+import { getProductColumns } from "~/components/admin/product-columns";
 import { createClient } from "~/.server/supabase";
-import { getCatalogs, archiveCatalog, restoreCatalog, upsertCatalog } from "~/.server/services/catalog";
-import type { Catalog } from "~/models/catalog";
+import { getProducts, archiveProduct, restoreProduct, upsertProduct } from "~/.server/services/product";
+import type { Product } from "~/models/product";
 import type { ComponentProps } from "~/models/route";
 import { toast } from "~/components/ui/toast";
 
 export const handle = {
-    title: "Available Catalogs",
+    title: "Available Products",
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const { supabase } = createClient(request);
-    const catalogs = await getCatalogs(supabase, "active");
-    return { catalogs };
+    const products = await getProducts(supabase, "active");
+
+    return { products };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -29,22 +30,22 @@ export async function action({ request }: ActionFunctionArgs) {
     const intent = formData.get("intent") as string;
 
     if (intent === "archive") {
-        return archiveCatalog(supabase, formData.get("id") as string);
+        return archiveProduct(supabase, formData.get("id") as string);
     }
 
     if (intent === "restore") {
-        return restoreCatalog(supabase, formData.get("id") as string);
+        return restoreProduct(supabase, formData.get("id") as string);
     }
 
     if (intent === "create" || intent === "update") {
-        return upsertCatalog(supabase, formData, intent);
+        return upsertProduct(supabase, formData, intent);
     }
 
     return null;
 }
 
-export default function Catalogs(props: ComponentProps<typeof loader>) {
-    const [selectedCatalog, setSelectedCatalog] = useState<Catalog | null>(null);
+export default function Products(props: ComponentProps<typeof loader>) {
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [mode, setMode] = useState<"create" | "update" | undefined>();
     const [isAboutToArchive, setIsAboutToArchive] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -64,7 +65,7 @@ export default function Catalogs(props: ComponentProps<typeof loader>) {
                     title: successMessage || "Operation completed successfully",
                 })
                 setMode(undefined);
-                setSelectedCatalog(null);
+                setSelectedProduct(null);
                 setIsAboutToArchive(false);
             }
         }
@@ -73,43 +74,43 @@ export default function Catalogs(props: ComponentProps<typeof loader>) {
     const submitForm = (formData: FormData) => {
         formData.append("intent", mode || "create");
 
-        if (selectedCatalog) {
-            formData.append("id", selectedCatalog.id);
-            formData.append("existing_img", selectedCatalog.img || "");
+        if (selectedProduct) {
+            formData.append("id", selectedProduct.id);
+            formData.append("existing_img", selectedProduct.img || "");
         }
 
         fetcher.submit(formData, {
             method: "post",
             encType: "multipart/form-data",
         }).then(() => {
-            setSuccessMessage(mode === "create" ? "Catalog item created successfully" : "Catalog item updated successfully");
+            setSuccessMessage(mode === "create" ? "Product item created successfully" : "Product item updated successfully");
         })
     };
 
     const archiveItem = () => {
-        if (selectedCatalog) {
-            fetcher.submit({ intent: "archive", id: selectedCatalog.id }, { method: "post" })
+        if (selectedProduct) {
+            fetcher.submit({ intent: "archive", id: selectedProduct.id }, { method: "post" })
                 .then(() => {
-                    setSuccessMessage("Catalog item archived successfully");
+                    setSuccessMessage("Product item archived successfully");
                 })
         }
     };
 
-    const restoreItem = (catalog: Catalog) => {
-        fetcher.submit({ intent: "restore", id: catalog.id }, { method: "post" })
+    const restoreItem = (product: Product) => {
+        fetcher.submit({ intent: "restore", id: product.id }, { method: "post" })
             .then(() => {
-                setSuccessMessage("Catalog item restored successfully");
+                setSuccessMessage("Product item restored successfully");
             })
     };
 
-    const columns = getCatalogColumns({
+    const columns = getProductColumns({
         isRestoring: fetcher.state !== "idle",
-        onEdit: (catalog) => {
-            setSelectedCatalog(catalog);
+        onEdit: (product) => {
+            setSelectedProduct(product);
             setMode("update");
         },
-        onArchive: (catalog) => {
-            setSelectedCatalog(catalog);
+        onArchive: (product) => {
+            setSelectedProduct(product);
             setIsAboutToArchive(true);
         },
         onRestore: restoreItem,
@@ -120,7 +121,7 @@ export default function Catalogs(props: ComponentProps<typeof loader>) {
             <div className="mb-4 grid lg:flex gap-2">
                 <Button
                     onClick={() => {
-                        setSelectedCatalog(null);
+                        setSelectedProduct(null);
                         setMode("create");
                     }}
                 >
@@ -128,20 +129,20 @@ export default function Catalogs(props: ComponentProps<typeof loader>) {
                 </Button>
             </div>
 
-            <DataTable columns={columns} data={props.loaderData.catalogs} />
+            <DataTable columns={columns} data={props.loaderData.products} />
 
             <FormDialog
                 isOpen={!!mode}
-                title={`${mode === "create" ? "Create" : "Edit"} catalog item`}
-                description={mode === "create" ? "Add a new item to your catalog" : "Update an existing catalog item"}
+                title={`${mode === "create" ? "Create" : "Edit"} product item`}
+                description={mode === "create" ? "Add a new item to your product list" : "Update an existing product item"}
                 isSubmitting={fetcher.state === "submitting"}
                 onSubmit={submitForm}
                 onClose={() => {
                     setMode(undefined);
-                    setSelectedCatalog(null);
+                    setSelectedProduct(null);
                 }}
             >
-                <CatalogForm catalog={selectedCatalog} errorMessage={fetcher.data?.error} />
+                <ProductForm product={selectedProduct} errorMessage={fetcher.data?.error} />
             </FormDialog>
 
             <ConfirmDialog
@@ -150,11 +151,11 @@ export default function Catalogs(props: ComponentProps<typeof loader>) {
                 isConfirming={fetcher.state !== "idle"}
                 onAbort={() => {
                     setIsAboutToArchive(false);
-                    setSelectedCatalog(null);
+                    setSelectedProduct(null);
                 }}
                 onClose={() => {
                     setIsAboutToArchive(false);
-                    setSelectedCatalog(null);
+                    setSelectedProduct(null);
                 }}
                 title="Are you sure you want to archive this item?"
                 description="This will set the item as archived. You can restore it later."
