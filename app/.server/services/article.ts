@@ -1,26 +1,20 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Article } from "~/models/article";
+import type { Tag } from "~/models/tag";
 import { archiveRecord, restoreRecord, slugify, uploadStorageFile } from "./base";
+import { normalizeTagNames, syncArticleTags } from "./tag";
 
 export type ArticleStatus = "published" | "draft" | "archived" | "all";
 
-export type Article = {
-    id: string;
-    title: string;
-    slug: string;
-    author: string;
-    cover: string;
-    content: string;
-    is_published: boolean;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string | null;
+type ArticleWithTagLinks = Omit<Article, "tags"> & {
+    article_tag?: Array<{ tags: Tag | null }>;
 };
 
 export async function getArticles(
     supabase: SupabaseClient,
     status: ArticleStatus = "published"
 ) {
-    let query = supabase.from("articles").select("*");
+    let query = supabase.from("articles").select("*, article_tag(tags(id, name))");
 
     switch (status) {
         case "archived":
@@ -42,7 +36,13 @@ export async function getArticles(
     const { data, error } = await query.order("created_at", { ascending: false });
 
     if (error) throw new Response(error.message, { status: 500 });
-    return data as Article[];
+
+    return (data as ArticleWithTagLinks[] ?? []).map((article) => ({
+        ...article,
+        tags: (article.article_tag ?? [])
+            .map((link) => link.tags)
+            .filter(Boolean),
+    })) as Article[];
 }
 
 // 1. Menggunakan Helper Generik archiveRecord
@@ -63,6 +63,7 @@ export async function upsertArticle(
     const id = formData.get("id") as string;
     const title = formData.get("title") as string;
     const author = formData.get("author") as string;
+    const tags = normalizeTagNames(String(formData.get("tags") ?? ""));
     const is_published = formData.get("is_published") === "true";
 
     const coverFile = formData.get("cover") as File | null;
@@ -100,11 +101,21 @@ export async function upsertArticle(
     };
 
     if (intent === "create") {
-        const { error } = await supabase.from("articles").insert([payload]);
+        const { data, error } = await supabase.from("articles").insert([payload]).select("id").single();
         if (error) return { error: error.message };
+        try {
+            await syncArticleTags(supabase, data.id, tags);
+        } catch (error) {
+            return { error: error instanceof Error ? error.message : "Failed to synchronize article tags." };
+        }
     } else {
         const { error } = await supabase.from("articles").update(payload).eq("id", id);
         if (error) return { error: error.message };
+        try {
+            await syncArticleTags(supabase, id, tags);
+        } catch (error) {
+            return { error: error instanceof Error ? error.message : "Failed to synchronize article tags." };
+        }
     }
 
     return { success: true };

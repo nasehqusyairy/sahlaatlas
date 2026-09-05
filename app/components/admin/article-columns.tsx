@@ -4,6 +4,7 @@ import { Button } from "~/components/ui/button";
 import type { Article } from "~/models/article";
 import type { features } from "~/components/datatable";
 import { Link } from "react-router";
+import { Badge } from "~/components/ui/badge";
 
 export const getArticleColumns = (arg: {
     onEdit: (article: Article) => void;
@@ -38,6 +39,19 @@ export const getArticleColumns = (arg: {
         {
             accessorKey: "author",
             header: "Author",
+        },
+        {
+            accessorKey: "tags",
+            header: "Tags",
+            cell: ({ row }) => (
+                <div className="flex flex-wrap gap-1 w-xs">
+                    {row.original.tags?.map((tag) => (
+                        <Badge key={tag.id} variant="outline">
+                            {tag.name}
+                        </Badge>
+                    ))}
+                </div>
+            ),
         },
         {
             accessorKey: "updated_at",

@@ -12,7 +12,7 @@ const NAV_ITEMS = [
     { label: "Home", href: "/" },
     { label: "About Us", href: "/about" },
     { label: "Product", href: "/product" },
-    { label: "Blog", href: "/blog" },
+    { label: "Blog", href: "/blogs" },
 ];
 
 export function Navbar() {

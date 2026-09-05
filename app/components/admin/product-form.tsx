@@ -62,7 +62,7 @@ export function ProductForm({ product, errorMessage }: ProductFormProps) {
                         <img
                             src={product.img}
                             alt="Current Product"
-                            className="h-16 w-16 object-cover rounded border"
+                            className="h-16 aspect-square object-cover"
                         />
                     </div>
                 )}
