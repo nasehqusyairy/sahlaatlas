@@ -97,7 +97,7 @@ export default function BlogDetail({ loaderData }: ComponentProps<typeof loader>
                 </header>
 
                 {article.cover && (
-                    <img src={article.cover} alt={article.title} className="mb-10 aspect-video w-full object-cover" />
+                    <img src={article.cover} alt={article.title} className="mb-10 aspect-video w-full object-cover" loading="lazy" />
                 )}
 
                 <section className="docx-content prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: html }} />
