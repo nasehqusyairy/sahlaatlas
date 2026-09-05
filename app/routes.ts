@@ -5,6 +5,7 @@ export default [
         index("routes/home.tsx"),
         route('about', 'routes/about.tsx'),
         route('blogs', 'routes/blogs.tsx'),
+        route('blogs/:slug', 'routes/blog-detail.tsx'),
         route('tags', 'routes/tags.tsx'),
     ]),
     route('admin', 'routes/layouts/admin.tsx', [

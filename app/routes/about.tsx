@@ -1,72 +1,64 @@
-import { useEffect, useState } from "react";
 import mammoth from "mammoth";
-import { Cover } from "~/components/cover";
+import { type LoaderFunctionArgs } from "react-router";
+import { createClient } from "~/.server/supabase";
+import { getPublishedArticleBySlug } from "~/.server/services/article";
+import BlogDetail from "./blog-detail";
 
-export default function About() {
-    const [htmlContent, setHtmlContent] = useState<string>("");
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [isError, setIsError] = useState<boolean>(false);
+export async function loader({ request }: LoaderFunctionArgs) {
+    const { supabase } = createClient(request);
 
-    useEffect(() => {
-        async function fetchAndConvertDocx() {
-            try {
-                // 1. Ambil file about.docx dari folder public
-                const response = await fetch("/mamoth_html_test_article.docx");
-                if (!response.ok) {
-                    throw new Error("File about.docx tidak ditemukan di public/");
-                }
+    // Khusus mengambil artikel dengan slug "about-us"
+    const article = await getPublishedArticleBySlug(supabase, "about-us");
 
-                const arrayBuffer = await response.arrayBuffer();
+    if (!article || !article.content) {
+        throw new Response("Halaman About Us tidak ditemukan", { status: 404 });
+    }
 
-                // 2. Konversi ArrayBuffer dari .docx menjadi HTML
-                const result = await mammoth.convertToHtml(
-                    { arrayBuffer },
-                    {
-                        // Opsi konversi gambar inline ke format Base64
-                        convertImage: mammoth.images.imgElement((element) => {
-                            return element.read("base64").then((imageBuffer) => ({
-                                src: `data:${element.contentType};base64,${imageBuffer}`,
-                            }));
-                        }),
-                    }
-                );
+    // 1. Ekstraksi Path Storage Supabase
+    const BUCKET_NAME = "article_assets";
+    let storagePath: string;
 
-                setHtmlContent(result.value);
-            } catch (error) {
-                console.error("Gagal mengonversi file DOCX:", error);
-                setIsError(true);
-            } finally {
-                setIsLoading(false);
-            }
+    try {
+        const contentUrl = new URL(article.content);
+        const bucketPathSegment = `/${BUCKET_NAME}/`;
+        const pathIndex = contentUrl.pathname.indexOf(bucketPathSegment);
+
+        if (pathIndex !== -1) {
+            storagePath = decodeURIComponent(contentUrl.pathname.slice(pathIndex + bucketPathSegment.length));
+        } else {
+            storagePath = contentUrl.pathname.replace(/^\/+/, "");
         }
+    } catch {
+        storagePath = article.content.replace(/^\/+/, "");
+    }
 
-        fetchAndConvertDocx();
-    }, []);
+    // 2. Download File dari Supabase Storage
+    const { data: contentFile, error } = await supabase.storage
+        .from(BUCKET_NAME)
+        .download(storagePath);
 
-    return (
-        <>
-            <Cover title="About Us" />
+    if (error || !contentFile) {
+        console.error("Storage download error:", error);
+        throw new Response(error?.message ?? "Gagal mengunduh konten About Us", { status: 502 });
+    }
 
-            <section className="container mx-auto px-4 lg:px-0 py-12">
-                {isLoading && (
-                    <div className="flex justify-center py-12">
-                        <p className="text-gray-500 animate-pulse">Memuat konten...</p>
-                    </div>
-                )}
+    // 3. Konversi DOCX ke HTML via Mammoth
+    const blobBuffer = await contentFile.arrayBuffer();
+    const nodeBuffer = Buffer.from(blobBuffer);
 
-                {isError && (
-                    <div className="p-4 rounded-lg bg-red-50 text-red-600 text-center">
-                        Gagal memuat artikel. Pastikan file <code className="font-mono bg-red-100 px-1 py-0.5 rounded">public/about.docx</code> sudah tersedia.
-                    </div>
-                )}
-
-                {!isLoading && !isError && (
-                    <article
-                        className="docx-content"
-                        dangerouslySetInnerHTML={{ __html: htmlContent }}
-                    />
-                )}
-            </section>
-        </>
+    const { value: html } = await mammoth.convertToHtml(
+        { buffer: nodeBuffer },
+        {
+            convertImage: mammoth.images.imgElement(async (element) => {
+                const imageBuffer = await element.read("base64");
+                return {
+                    src: `data:${element.contentType};base64,${imageBuffer}`,
+                };
+            }),
+        }
     );
+
+    return { article, html };
 }
+
+export default BlogDetail

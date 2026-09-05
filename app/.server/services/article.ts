@@ -81,6 +81,30 @@ export async function getArticlesPage(
     return { articles, total: count ?? 0 };
 }
 
+export async function getPublishedArticleBySlug(
+    supabase: SupabaseClient,
+    slug: string,
+) {
+    const { data, error } = await supabase
+        .from("articles")
+        .select("*, article_tag(tags(id, name))")
+        .eq("slug", slug)
+        .is("deleted_at", null)
+        .eq("is_published", true)
+        .maybeSingle();
+
+    if (error) throw new Response(error.message, { status: 500 });
+    if (!data) throw new Response("Article not found", { status: 404 });
+
+    const article = data as ArticleWithTagLinks;
+    return {
+        ...article,
+        tags: (article.article_tag ?? [])
+            .map((link) => link.tags)
+            .filter(Boolean),
+    } as Article;
+}
+
 // 1. Menggunakan Helper Generik archiveRecord
 export async function archiveArticle(supabase: SupabaseClient, id: string) {
     return archiveRecord(supabase, "articles", id);
