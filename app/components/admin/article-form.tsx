@@ -11,6 +11,7 @@ import {
     ComboboxEmpty,
     ComboboxItem,
     ComboboxList,
+    useComboboxAnchor,
 } from "../ui/combobox";
 import { Field, FieldGroup } from "../ui/field";
 import { Input } from "../ui/input";
@@ -30,6 +31,11 @@ export function ArticleForm({ article, errorMessage }: ArticleFormProps) {
     );
     const [tagInputValue, setTagInputValue] = useState("");
     const articleId = article?.id ?? "new";
+
+    const anchor = useComboboxAnchor()
+
+    const tagItems = tagsFetcher.data?.tags?.map((tag) => tag.name) ?? []
+    const rawTags = tagsFetcher.data?.tags ?? []
 
     useEffect(() => {
         if (tagsFetcher.state === "idle" && !tagsFetcher.data) {
@@ -100,9 +106,10 @@ export function ArticleForm({ article, errorMessage }: ArticleFormProps) {
                     onValueChange={(value) => setSelectedTags(value)}
                     inputValue={tagInputValue}
                     onInputValueChange={setTagInputValue}
-                    items={tagsFetcher.data?.tags?.map((tag) => tag.name) ?? []}
+                    items={tagItems}
                 >
-                    <ComboboxChips className="min-h-10 w-full border-input px-3">
+                    {/* 2. Pasang ref={anchor} di sini */}
+                    <ComboboxChips ref={anchor}>
                         {selectedTags.map((tag) => (
                             <ComboboxChip key={tag}>
                                 {tag}
@@ -113,17 +120,22 @@ export function ArticleForm({ article, errorMessage }: ArticleFormProps) {
                             placeholder="Ketik tag lalu tekan koma"
                             onKeyDown={(event) => {
                                 if (event.key === ",") {
-                                    event.preventDefault();
-                                    addTagFromInput(tagInputValue.trim());
-                                    setTagInputValue("");
+                                    event.preventDefault()
+                                    const trimmed = tagInputValue.trim().replace(/,/g, "")
+                                    if (trimmed) {
+                                        addTagFromInput(trimmed)
+                                        setTagInputValue("")
+                                    }
                                 }
                             }}
                         />
                     </ComboboxChips>
-                    <ComboboxContent>
+
+                    {/* 3. Hubungkan Content ke anchor agar lebarnya persis 100% mengikuti ComboboxChips */}
+                    <ComboboxContent anchor={anchor}>
                         <ComboboxList>
                             <ComboboxEmpty>Tag tidak ditemukan.</ComboboxEmpty>
-                            {(tagsFetcher.data?.tags ?? []).map((tag) => (
+                            {rawTags.map((tag) => (
                                 <ComboboxItem key={tag.id} value={tag.name}>
                                     {tag.name}
                                 </ComboboxItem>

@@ -1,63 +1,106 @@
+import React, { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
+import { Form } from "react-router";
 import { Input } from "~/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select";
+import {
+    Combobox,
+    ComboboxChip,
+    ComboboxChips,
+    ComboboxChipsInput,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxItem,
+    ComboboxList,
+    ComboboxValue,
+    useComboboxAnchor,
+} from "../ui/combobox";
 import { Card, CardContent } from "../ui/card";
+import type { Tag } from "~/models/tag";
+import { Field, FieldGroup } from "../ui/field";
+import { Button } from "../ui/button";
 
 type BlogFiltersProps = {
     searchQuery: string;
-    selectedMonth: string;
-    selectedYear: string;
-    onSearchChange: (value: string) => void;
-    onMonthChange: (value: string) => void;
-    onYearChange: (value: string) => void;
+    selectedTagNames: string[];
+    tags: Tag[];
 };
 
 export function BlogFilters({
     searchQuery,
-    selectedMonth,
-    selectedYear,
-    onSearchChange,
-    onMonthChange,
-    onYearChange,
+    selectedTagNames,
+    tags,
 }: BlogFiltersProps) {
+    const searchInputRef = useRef<HTMLInputElement>(null);
+    const [draftTagNames, setDraftTagNames] = useState(selectedTagNames);
+
+    const anchor = useComboboxAnchor()
+
+    useEffect(() => {
+        if (searchInputRef.current) {
+            searchInputRef.current.value = searchQuery;
+        }
+        setDraftTagNames(selectedTagNames);
+    }, [searchQuery, selectedTagNames]);
+
     return (
         <Card>
             <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="relative sm:col-span-2">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            placeholder="Cari judul, penulis, atau isi artikel..."
-                            className="pl-9"
-                            value={searchQuery}
-                            onChange={(event) => onSearchChange(event.target.value)}
-                        />
-                    </div>
-                    <Select value={selectedMonth} onValueChange={(value) => onMonthChange(value ?? "all")}>
-                        <SelectTrigger className={'w-full'}>
-                            <SelectValue placeholder="Pilih Bulan" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">Semua Bulan</SelectItem>
-                            {[
-                                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-                                "Juli", "Agustus", "September", "Oktober", "November", "Desember",
-                            ].map((month, index) => (
-                                <SelectItem key={month} value={`${index + 1}`}>{month}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <Select value={selectedYear} onValueChange={(value) => onYearChange(value ?? "all")}>
-                        <SelectTrigger className={'w-full'}>
-                            <SelectValue placeholder="Pilih Tahun" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">Semua Tahun</SelectItem>
-                            <SelectItem value="2026">2026</SelectItem>
-                            <SelectItem value="2025">2025</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
+                <Form method="get">
+                    <FieldGroup>
+                        <Field orientation="responsive">
+                            <Input
+                                ref={searchInputRef}
+                                name="search"
+                                placeholder="Find title..."
+                                defaultValue={searchQuery}
+                                className="min-w-0 flex-1"
+                            />
+                            <input type="hidden" name="tags" value={draftTagNames.join(",")} />
+                            <div className="min-w-0 flex-1">
+                                <Combobox
+                                    multiple
+                                    value={draftTagNames}
+                                    onValueChange={setDraftTagNames}
+                                    items={tags.map((tag) => tag.name)}
+                                >
+                                    {/* 2. Pasang ref={anchor} pada ComboboxChips */}
+                                    <ComboboxChips ref={anchor} className="w-full">
+                                        <ComboboxValue>
+                                            {(values) => (
+                                                <React.Fragment>
+                                                    {values.map((tagName: string) => (
+                                                        <ComboboxChip key={tagName}>
+                                                            {tagName}
+                                                        </ComboboxChip>
+                                                    ))}
+                                                    <ComboboxChipsInput
+                                                        aria-label="Filter berdasarkan tag"
+                                                        placeholder="Pilih tag..."
+                                                    />
+                                                </React.Fragment>
+                                            )}
+                                        </ComboboxValue>
+                                    </ComboboxChips>
+
+                                    {/* 3. Hubungkan ComboboxContent ke anchor */}
+                                    <ComboboxContent anchor={anchor}>
+                                        <ComboboxList>
+                                            <ComboboxEmpty>Tag tidak ditemukan.</ComboboxEmpty>
+                                            {tags.map((tag) => (
+                                                <ComboboxItem key={tag.id} value={tag.name}>
+                                                    {tag.name}
+                                                </ComboboxItem>
+                                            ))}
+                                        </ComboboxList>
+                                    </ComboboxContent>
+                                </Combobox>
+                            </div>
+                            <Button type="submit">
+                                <Search /> Search
+                            </Button>
+                        </Field>
+                    </FieldGroup>
+                </Form>
             </CardContent>
         </Card>
     );

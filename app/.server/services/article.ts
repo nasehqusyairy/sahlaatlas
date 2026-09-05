@@ -10,11 +10,31 @@ type ArticleWithTagLinks = Omit<Article, "tags"> & {
     article_tag?: Array<{ tags: Tag | null }>;
 };
 
+type GetArticlesPageOptions = {
+    search?: string;
+    tagNames?: string[];
+    limit?: number | null;
+    offset?: number;
+};
+
 export async function getArticles(
     supabase: SupabaseClient,
     status: ArticleStatus = "published"
 ) {
-    let query = supabase.from("articles").select("*, article_tag(tags(id, name))");
+    const { articles } = await getArticlesPage(supabase, status, { limit: null });
+    return articles;
+}
+
+export async function getArticlesPage(
+    supabase: SupabaseClient,
+    status: ArticleStatus = "published",
+    options: GetArticlesPageOptions = {},
+) {
+    const limit = options.limit === null ? null : Math.min(Math.max(options.limit ?? 10, 1), 100);
+    const offset = Math.max(options.offset ?? 0, 0);
+    const hasTagFilter = (options.tagNames?.length ?? 0) > 0;
+    const relation = hasTagFilter ? "article_tag!inner(tags!inner(id, name))" : "article_tag(tags(id, name))";
+    let query = supabase.from("articles").select(`*, ${relation}`, { count: "exact" });
 
     switch (status) {
         case "archived":
@@ -33,16 +53,32 @@ export async function getArticles(
             break;
     }
 
-    const { data, error } = await query.order("created_at", { ascending: false });
+    if (options.search?.trim()) {
+        const search = options.search.trim().replace(/[\\%_]/g, "\\$&");
+        query = query.ilike("title", `%${search}%`);
+    }
+
+    if (hasTagFilter) {
+        query = query.in("article_tag.tags.name", options.tagNames ?? []);
+    }
+
+    query = query.order("created_at", { ascending: false });
+    if (limit !== null) {
+        query = query.range(offset, offset + limit - 1);
+    }
+
+    const { data, count, error } = await query;
 
     if (error) throw new Response(error.message, { status: 500 });
 
-    return (data as ArticleWithTagLinks[] ?? []).map((article) => ({
+    const articles = (data as ArticleWithTagLinks[] ?? []).map((article) => ({
         ...article,
         tags: (article.article_tag ?? [])
             .map((link) => link.tags)
             .filter(Boolean),
     })) as Article[];
+
+    return { articles, total: count ?? 0 };
 }
 
 // 1. Menggunakan Helper Generik archiveRecord
