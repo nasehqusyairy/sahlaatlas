@@ -1,12 +1,13 @@
-import { Calendar, LoaderCircle, User } from "lucide-react";
+import { Calendar, FileQuestion, LoaderCircle, User } from "lucide-react";
 import { Link, useFetcher, useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import type { Article } from "~/models/article";
 import type { loader } from "~/routes/blogs";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "../ui/empty";
 
 type BlogGridProps = {
     articles: Article[];
@@ -42,10 +43,23 @@ export function BlogGrid({ articles, hasMore: initialHasMore, offset }: BlogGrid
 
     if (loadedArticles.length === 0) {
         return (
-            <Card className="p-12 text-center flex flex-col items-center gap-3">
-                <CardTitle>Artikel Tidak Ditemukan</CardTitle>
-                <CardDescription>Coba ubah kata kunci pencarian atau tag yang dipilih.</CardDescription>
-                <Button variant="outline" size="sm" onClick={() => navigate("/blogs")}>Reset Semua Filter</Button>
+            <Card>
+                <CardContent>
+                    <Empty className="p-12">
+                        <EmptyHeader>
+                            <EmptyMedia variant={'icon'} className="bg-primary">
+                                <FileQuestion className="text-primary-foreground" />
+                            </EmptyMedia>
+                            <EmptyTitle>Artikel Tidak Ditemukan</EmptyTitle>
+                            <EmptyDescription>
+                                Coba ubah kata kunci pencarian atau tag yang dipilih.
+                            </EmptyDescription>
+                        </EmptyHeader>
+                        <Button variant="outline" size="sm" onClick={() => navigate("/blogs")}>
+                            Reset Semua Filter
+                        </Button>
+                    </Empty>
+                </CardContent>
             </Card>
         );
     }
