@@ -23,13 +23,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return { articles, tags, total, offset, limit, hasMore: offset + articles.length < total };
 }
 
-export function meta() {
-    return [
-        { title: "Blog & Wawasan Modern" },
-        { name: "description", content: "Temukan artikel, panduan, dan wawasan terbaru seputar teknologi, desain, dan bisnis." },
-    ];
-}
-
 export default function Blogs(props: ComponentProps<typeof loader>) {
     const [searchParams] = useSearchParams();
     const searchQuery = searchParams.get("search") ?? "";

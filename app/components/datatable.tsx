@@ -1,13 +1,12 @@
+import { useEffect, useState } from "react";
 import { useTable, type ColumnDef, type RowData } from "@tanstack/react-table";
 
 import {
     columnFilteringFeature,
     columnVisibilityFeature,
     createFilteredRowModel,
-    createPaginatedRowModel,
     createSortedRowModel,
     filterFn_includesString,
-    rowPaginationFeature,
     rowSelectionFeature,
     rowSortingFeature,
     sortFn_alphanumeric,
@@ -23,22 +22,18 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import { Search } from "lucide-react"
-import {
-    InputGroup,
-    InputGroupAddon,
-    InputGroupInput,
-} from "~/components/ui/input-group"
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
+import { Field, FieldGroup } from "./ui/field";
+import { Form, useSearchParams } from "react-router";
+import { Input } from "./ui/input";
 
 export const features = tableFeatures({
     columnFilteringFeature,
     columnVisibilityFeature,
-    rowPaginationFeature,
     rowSelectionFeature,
     rowSortingFeature,
     filteredRowModel: createFilteredRowModel(),
-    paginatedRowModel: createPaginatedRowModel(),
     sortedRowModel: createSortedRowModel(),
     filterFns: { includesString: filterFn_includesString },
     sortFns: { alphanumeric: sortFn_alphanumeric, text: sortFn_text },
@@ -47,12 +42,30 @@ export const features = tableFeatures({
 type DataTableProps<TData extends RowData> = {
     columns: ColumnDef<typeof features, TData>[]
     data: TData[]
+    total: number
+    offset: number
+    limit: number
+    search: string
 }
 
 export function DataTable<TData extends RowData>({
     columns,
-    data
+    data,
+    total,
+    offset,
+    limit,
+    search,
 }: DataTableProps<TData>) {
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const updateTableQuery = (values: { search?: string; offset?: number }) => {
+        const next = new URLSearchParams(searchParams);
+        if (values.search?.trim()) next.set("search", values.search.trim());
+        else if (values.search !== undefined) next.delete("search");
+        if (values.offset !== undefined) next.set("offset", String(values.offset));
+        setSearchParams(next, { replace: true });
+    };
+
     const table = useTable<typeof features, TData>({
         features,
         data,
@@ -64,12 +77,24 @@ export function DataTable<TData extends RowData>({
             <Card>
                 <CardContent>
                     <div className="mb-4 grid lg:flex gap-2 lg:justify-end">
-                        <InputGroup className="lg:max-w-xs">
-                            <InputGroupInput placeholder="Search..." />
-                            <InputGroupAddon>
-                                <Search />
-                            </InputGroupAddon>
-                        </InputGroup>
+                        <Form
+                            className="lg:max-w-sm w-full"
+                            onSubmit={(event) => {
+                                event.preventDefault();
+                                const formData = new FormData(event.currentTarget);
+                                updateTableQuery({
+                                    search: String(formData.get("search") ?? ""),
+                                    offset: 0,
+                                });
+                            }}
+                        >
+                            <FieldGroup>
+                                <Field orientation={'horizontal'}>
+                                    <Input name="search" placeholder="Search..." defaultValue={search} />
+                                    <Button size={'icon'} type="submit"><Search /></Button>
+                                </Field>
+                            </FieldGroup>
+                        </Form>
                     </div>
                     <div className="overflow-hidden border mb-4">
                         <Table>
@@ -116,16 +141,16 @@ export function DataTable<TData extends RowData>({
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
+                            onClick={() => updateTableQuery({ offset: Math.max(offset - limit, 0) })}
+                            disabled={offset === 0}
                         >
                             Previous
                         </Button>
                         <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
+                            onClick={() => updateTableQuery({ offset: offset + limit })}
+                            disabled={offset + data.length >= total}
                         >
                             Next
                         </Button>

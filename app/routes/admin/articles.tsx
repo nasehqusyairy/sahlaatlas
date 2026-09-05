@@ -8,7 +8,7 @@ import { ConfirmDialog } from "~/components/confirm-dialog";
 import { ArticleForm } from "~/components/admin/article-form";
 import { getArticleColumns } from "~/components/admin/article-columns";
 import { createClient } from "~/.server/supabase";
-import { getArticles, archiveArticle, restoreArticle, upsertArticle } from "~/.server/services/article";
+import { getArticlesPage, archiveArticle, restoreArticle, upsertArticle } from "~/.server/services/article";
 import type { Article } from "~/models/article";
 import type { ComponentProps } from "~/models/route";
 import { toast } from "~/components/ui/toast";
@@ -19,8 +19,13 @@ export const handle = {
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const { supabase } = createClient(request);
-    const articles = await getArticles(supabase, "published");
-    return { articles };
+    const url = new URL(request.url);
+    const search = url.searchParams.get("search") ?? "";
+    const requestedOffset = Number.parseInt(url.searchParams.get("offset") ?? "0", 10);
+    const offset = Number.isFinite(requestedOffset) ? Math.max(requestedOffset, 0) : 0;
+    const limit = 10;
+    const { articles, total } = await getArticlesPage(supabase, "published", { search, offset, limit });
+    return { articles, total, offset, limit, search };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -132,7 +137,14 @@ export default function Articles(props: ComponentProps<typeof loader>) {
                 </Button>
             </div>
 
-            <DataTable columns={columns} data={props.loaderData.articles} />
+            <DataTable
+                columns={columns}
+                data={props.loaderData.articles}
+                total={props.loaderData.total}
+                offset={props.loaderData.offset}
+                limit={props.loaderData.limit}
+                search={props.loaderData.search}
+            />
 
             <FormDialog
                 isOpen={!!mode}

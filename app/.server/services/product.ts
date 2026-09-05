@@ -3,6 +3,12 @@ import { archiveRecord, restoreRecord, uploadStorageFile } from "./base";
 
 export type ProductStatus = "active" | "archived" | "all";
 
+type GetProductsPageOptions = {
+    search?: string;
+    limit?: number | null;
+    offset?: number;
+};
+
 export type Product = {
     id: string;
     title: string;
@@ -19,12 +25,23 @@ export async function getProducts(
     supabase: SupabaseClient,
     status: ProductStatus = "active"
 ) {
+    const { products } = await getProductsPage(supabase, status, { limit: null });
+    return products;
+}
+
+export async function getProductsPage(
+    supabase: SupabaseClient,
+    status: ProductStatus = "active",
+    options: GetProductsPageOptions = {},
+) {
+    const limit = options.limit === null ? null : Math.min(Math.max(options.limit ?? 10, 1), 100);
+    const offset = Math.max(options.offset ?? 0, 0);
     let query = supabase.from("products").select(`
         *,
         product_discount (
             discounts (*)
         )
-    `);
+    `, { count: "exact" });
 
     switch (status) {
         case "archived":
@@ -37,9 +54,17 @@ export async function getProducts(
             break;
     }
 
-    const { data, error } = await query.order("created_at", { ascending: false });
+    if (options.search?.trim()) {
+        const search = options.search.trim().replace(/[\\%_]/g, "\\$&");
+        query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
+    }
+
+    query = query.order("created_at", { ascending: false });
+    if (limit !== null) query = query.range(offset, offset + limit - 1);
+
+    const { data, count, error } = await query;
     if (error) throw new Response(error.message, { status: 500 });
-    return data;
+    return { products: data ?? [], total: count ?? 0 };
 }
 
 export async function archiveProduct(supabase: SupabaseClient, id: string) {

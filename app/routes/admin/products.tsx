@@ -8,7 +8,7 @@ import { ConfirmDialog } from "~/components/confirm-dialog";
 import { ProductForm } from "~/components/admin/product-form";
 import { getProductColumns } from "~/components/admin/product-columns";
 import { createClient } from "~/.server/supabase";
-import { getProducts, archiveProduct, restoreProduct, upsertProduct } from "~/.server/services/product";
+import { getProductsPage, archiveProduct, restoreProduct, upsertProduct } from "~/.server/services/product";
 import type { Product } from "~/models/product";
 import type { ComponentProps } from "~/models/route";
 import { toast } from "~/components/ui/toast";
@@ -19,9 +19,14 @@ export const handle = {
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const { supabase } = createClient(request);
-    const products = await getProducts(supabase, "active");
+    const url = new URL(request.url);
+    const search = url.searchParams.get("search") ?? "";
+    const requestedOffset = Number.parseInt(url.searchParams.get("offset") ?? "0", 10);
+    const offset = Number.isFinite(requestedOffset) ? Math.max(requestedOffset, 0) : 0;
+    const limit = 10;
+    const { products, total } = await getProductsPage(supabase, "active", { search, offset, limit });
 
-    return { products };
+    return { products, total, offset, limit, search };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -129,7 +134,14 @@ export default function Products(props: ComponentProps<typeof loader>) {
                 </Button>
             </div>
 
-            <DataTable columns={columns} data={props.loaderData.products} />
+            <DataTable
+                columns={columns}
+                data={props.loaderData.products}
+                total={props.loaderData.total}
+                offset={props.loaderData.offset}
+                limit={props.loaderData.limit}
+                search={props.loaderData.search}
+            />
 
             <FormDialog
                 isOpen={!!mode}
