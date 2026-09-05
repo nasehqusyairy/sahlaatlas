@@ -96,7 +96,7 @@ export async function upsertProduct(
     }
 
     if (intent === "create" && !imgUrl) {
-        return { error: "Gambar produk wajib diisi." };
+        return { error: "Product image is required." };
     }
 
     const payload = {

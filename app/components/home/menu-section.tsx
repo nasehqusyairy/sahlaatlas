@@ -46,7 +46,7 @@ function MenuCard(props: MenuCardProps) {
 function MenuCarousel() {
     return (
         <Carousel className="w-full">
-            {/* Wrapper untuk mengetengahkan tombol */}
+            {/* Wrapper for centering the button. */}
             <div className="flex gap-4 mb-4 text-white">
                 <CarouselPrevious className="static" />
                 <CarouselNext className="static" />

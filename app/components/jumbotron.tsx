@@ -9,10 +9,10 @@ interface JumbotronProps {
 export function Jumbotron({ userName = "Admin" }: JumbotronProps) {
     const getGreeting = () => {
         const hour = new Date().getHours()
-        if (hour < 12) return "Selamat Pagi"
-        if (hour < 15) return "Selamat Siang"
-        if (hour < 18) return "Selamat Sore"
-        return "Selamat Malam"
+        if (hour < 12) return "Good morning"
+        if (hour < 15) return "Good afternoon"
+        if (hour < 18) return "Good evening"
+        return "Good evening"
     }
 
     return (
@@ -26,8 +26,8 @@ export function Jumbotron({ userName = "Admin" }: JumbotronProps) {
                         </h1>
 
                         <p className="max-w-xl text-sm sm:text-base">
-                            Senang melihat Anda kembali.
-                            {/* Berikut ringkasan performa dan aktivitas sistem Anda hari ini. */}
+                            Welcome back.
+                            {/* Here is a summary of your performance and system activity today. */}
                         </p>
                     </div>
 

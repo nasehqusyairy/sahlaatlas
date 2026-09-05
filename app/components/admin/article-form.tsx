@@ -108,7 +108,7 @@ export function ArticleForm({ article, errorMessage }: ArticleFormProps) {
                     onInputValueChange={setTagInputValue}
                     items={tagItems}
                 >
-                    {/* 2. Pasang ref={anchor} di sini */}
+                    {/* 2. Attach ref={anchor} here */}
                     <ComboboxChips ref={anchor}>
                         {selectedTags.map((tag) => (
                             <ComboboxChip key={tag}>
@@ -117,7 +117,7 @@ export function ArticleForm({ article, errorMessage }: ArticleFormProps) {
                         ))}
                         <ComboboxChipsInput
                             aria-label="Add article tags"
-                            placeholder="Ketik tag lalu tekan koma"
+                            placeholder="Type a tag, then press comma"
                             onKeyDown={(event) => {
                                 if (event.key === ",") {
                                     event.preventDefault()
@@ -131,10 +131,10 @@ export function ArticleForm({ article, errorMessage }: ArticleFormProps) {
                         />
                     </ComboboxChips>
 
-                    {/* 3. Hubungkan Content ke anchor agar lebarnya persis 100% mengikuti ComboboxChips */}
+                    {/* 3. Connect Content to the anchor so it matches the ComboboxChips width */}
                     <ComboboxContent anchor={anchor}>
                         <ComboboxList>
-                            <ComboboxEmpty>Tag tidak ditemukan.</ComboboxEmpty>
+                            <ComboboxEmpty>No tags found.</ComboboxEmpty>
                             {rawTags.map((tag) => (
                                 <ComboboxItem key={tag.id} value={tag.name}>
                                     {tag.name}

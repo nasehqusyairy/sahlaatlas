@@ -95,7 +95,7 @@ export async function upsertDiscount(
         }));
 
         const { error: relErr } = await supabase.from("product_discounts").insert(relations);
-        if (relErr) return { error: `Gagal memperbarui relasi produk: ${relErr.message}` };
+        if (relErr) return { error: `Failed to update product relationships: ${relErr.message}` };
     }
 
     return { success: true };

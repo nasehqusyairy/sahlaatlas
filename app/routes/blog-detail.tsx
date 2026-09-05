@@ -17,13 +17,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         throw new Response("Article content not found", { status: 404 });
     }
 
-    // 1. Ekstraksi Path Storage dengan Robust
+    // 1. Robustly extract the Storage path.
     const BUCKET_NAME = "article_assets";
     let storagePath: string;
 
     try {
         const contentUrl = new URL(article.content);
-        // Mencari posisi setelah nama bucket di path URL Supabase
+        // Find the position after the bucket name in the Supabase URL path.
         const bucketPathSegment = `/${BUCKET_NAME}/`;
         const pathIndex = contentUrl.pathname.indexOf(bucketPathSegment);
 
@@ -38,7 +38,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         storagePath = article.content.replace(/^\/+/, "");
     }
 
-    // 2. Download File dari Supabase Storage
+    // 2. Download the file from Supabase Storage.
     const { data: contentFile, error } = await supabase.storage
         .from(BUCKET_NAME)
         .download(storagePath);
@@ -48,7 +48,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         throw new Response(error?.message ?? "Article content could not be downloaded", { status: 502 });
     }
 
-    // 3. Konversi DOCX ke HTML via Mammoth (dengan penanganan ArrayBuffer yang aman)
+    // 3. Convert DOCX to HTML with Mammoth using a safe ArrayBuffer conversion.
     const blobBuffer = await contentFile.arrayBuffer();
     const nodeBuffer = Buffer.from(blobBuffer); // Mengubah ke Node Buffer agar Mammoth berjalan lancar di SSR
 

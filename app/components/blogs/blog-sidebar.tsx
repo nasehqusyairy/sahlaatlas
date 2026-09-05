@@ -12,7 +12,7 @@ export function BlogSidebar({ articles }: BlogSidebarProps) {
         <Card className="flex flex-col justify-between">
             <CardHeader className="pb-3">
                 <CardTitle className="flex items-center gap-2 text-base">
-                    <Sparkles className="h-4 w-4 text-primary" /> Artikel Terbaru
+                    <Sparkles className="h-4 w-4 text-primary" /> Latest Articles
                 </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-3">
@@ -25,7 +25,7 @@ export function BlogSidebar({ articles }: BlogSidebarProps) {
                             </Link>
                             <span className="text-[11px] text-muted-foreground flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
-                                {new Date(article.updated_at).toLocaleDateString("id-ID", { day: "numeric", month: "short" })}
+                                {new Date(article.updated_at).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
                             </span>
                         </div>
                     </div>

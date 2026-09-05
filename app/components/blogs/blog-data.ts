@@ -4,7 +4,7 @@ export function getArticleExcerpt(article: Article) {
     const content = article.content.trim();
 
     if (content.startsWith("http://") || content.startsWith("https://")) {
-        return "Baca artikel lengkap untuk mendapatkan wawasan selengkapnya.";
+        return "Read the full article for more insights.";
     }
 
     return content.length > 150 ? `${content.slice(0, 147)}...` : content;

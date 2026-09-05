@@ -26,7 +26,7 @@ export function AboutSection() {
 
                     <div className="relative w-full max-w-md mx-auto lg:max-w-none pb-14">
                         {/* Gambar 1 (Utama / Belakang - Dibuat Potret) */}
-                        {/* Menggunakan aspect-[3/4] dan menghapus fixed height agar mengikuti rasio potret */}
+                        {/* Use aspect-[3/4] and remove the fixed height to preserve the portrait ratio. */}
                         <motion.div variants={item} className="w-4/5 aspect-3/4 mx-auto relative z-0">
                             <img loading="lazy"
                                 src="/images/farmer2.jpg"
@@ -35,7 +35,7 @@ export function AboutSection() {
                             />
                         </motion.div>
 
-                        {/* Gambar 2 (Pojok Kanan Bawah - Memotong Gambar Utama dari Depan Bawah) */}
+                        {/* Image 2 (bottom-right corner, cropping the main image from the lower foreground). */}
                         <motion.div variants={item} className="absolute bottom-0 right-0 w-3/5 h-55 sm:h-70 z-20 border-8 border-muted">
                             <img loading="lazy"
                                 src="/images/farmer1.jpg"

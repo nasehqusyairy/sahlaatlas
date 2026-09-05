@@ -7,14 +7,14 @@ import BlogDetail from "./blog-detail";
 export async function loader({ request }: LoaderFunctionArgs) {
     const { supabase } = createClient(request);
 
-    // Khusus mengambil artikel dengan slug "about-us"
+    // Fetch only the article with the "about-us" slug.
     const article = await getPublishedArticleBySlug(supabase, "about-us");
 
     if (!article || !article.content) {
-        throw new Response("Halaman About Us tidak ditemukan", { status: 404 });
+        throw new Response("About Us page not found", { status: 404 });
     }
 
-    // 1. Ekstraksi Path Storage Supabase
+    // 1. Extract the Supabase Storage path.
     const BUCKET_NAME = "article_assets";
     let storagePath: string;
 
@@ -32,17 +32,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
         storagePath = article.content.replace(/^\/+/, "");
     }
 
-    // 2. Download File dari Supabase Storage
+    // 2. Download the file from Supabase Storage.
     const { data: contentFile, error } = await supabase.storage
         .from(BUCKET_NAME)
         .download(storagePath);
 
     if (error || !contentFile) {
         console.error("Storage download error:", error);
-        throw new Response(error?.message ?? "Gagal mengunduh konten About Us", { status: 502 });
+        throw new Response(error?.message ?? "Failed to download About Us content", { status: 502 });
     }
 
-    // 3. Konversi DOCX ke HTML via Mammoth
+    // 3. Convert DOCX to HTML with Mammoth.
     const blobBuffer = await contentFile.arrayBuffer();
     const nodeBuffer = Buffer.from(blobBuffer);
 

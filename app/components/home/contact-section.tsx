@@ -10,17 +10,17 @@ export function ContactSection() {
             id="contact"
             className="relative py-12 bg-fixed bg-center bg-cover bg-no-repeat overflow-hidden"
             style={{
-                // Background gambar komoditas/pertanian dengan efek Parallax via bg-fixed
+                // Commodity/agriculture background with a parallax effect via bg-fixed.
                 backgroundImage: `url('/images/contact.jpg')`,
             }}
         >
-            {/* Overlay Gelap untuk Meningkatkan Legibilitas Teks */}
+            {/* Dark overlay to improve text legibility. */}
             <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
 
             <div className="container relative z-10 mx-auto px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-                    {/* Sisi Kiri: Informasi Kontak & Pesan Utama (Slide 9) */}
+                    {/* Left side: contact information and main message (Slide 9). */}
                     <div className="text-white space-y-6">
                         <div>
                             <h2 className="text-4xl lg:text-5xl font-bold mt-2 leading-tight">
@@ -31,7 +31,7 @@ export function ContactSection() {
                             </p>
                         </div>
 
-                        {/* List Detail Kontak dari Slide 9 */}
+                        {/* Contact details from Slide 9. */}
                         <div className="space-y-5 pt-4">
                             <div className="flex items-center gap-4">
                                 <div className="p-3 bg-secondary/20 text-white border border-white/10">

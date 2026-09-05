@@ -63,7 +63,7 @@ export function BlogFilters({
                                     onValueChange={setDraftTagNames}
                                     items={tags.map((tag) => tag.name)}
                                 >
-                                    {/* 2. Pasang ref={anchor} pada ComboboxChips */}
+                                    {/* 2. Attach ref={anchor} to ComboboxChips */}
                                     <ComboboxChips ref={anchor} className="w-full">
                                         <ComboboxValue>
                                             {(values) => (
@@ -74,18 +74,18 @@ export function BlogFilters({
                                                         </ComboboxChip>
                                                     ))}
                                                     <ComboboxChipsInput
-                                                        aria-label="Filter berdasarkan tag"
-                                                        placeholder="Pilih tag..."
+                                                        aria-label="Filter by tag"
+                                                        placeholder="Select tags..."
                                                     />
                                                 </React.Fragment>
                                             )}
                                         </ComboboxValue>
                                     </ComboboxChips>
 
-                                    {/* 3. Hubungkan ComboboxContent ke anchor */}
+                                    {/* 3. Connect ComboboxContent to the anchor */}
                                     <ComboboxContent anchor={anchor}>
                                         <ComboboxList>
-                                            <ComboboxEmpty>Tag tidak ditemukan.</ComboboxEmpty>
+                                            <ComboboxEmpty>No tags found.</ComboboxEmpty>
                                             {tags.map((tag) => (
                                                 <ComboboxItem key={tag.id} value={tag.name}>
                                                     {tag.name}

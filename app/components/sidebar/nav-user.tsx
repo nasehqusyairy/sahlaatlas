@@ -12,7 +12,7 @@ import {
 import type { LoaderData } from "~/routes/layouts/admin";
 
 export function NavUser() {
-  // Ambil data loader dari route layout utama (misal ID: 'routes/admin' atau 'routes/layout')
+  // Get loader data from the main layout route (for example, ID: 'routes/admin' or 'routes/layout').
   const loaderData = useRouteLoaderData<LoaderData>("routes/layouts/admin");
   const user = loaderData?.user;
 

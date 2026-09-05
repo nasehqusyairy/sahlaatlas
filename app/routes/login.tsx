@@ -105,7 +105,7 @@ export default function LoginPage() {
                 </Field>
 
                 <Field>
-                  {/* Efek Loading pada Tombol Login */}
+                  {/* Loading effect on the Login button. */}
                   <Button type="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>

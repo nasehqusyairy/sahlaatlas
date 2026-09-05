@@ -22,9 +22,9 @@ export function BlogHero({ article }: BlogHeroProps) {
             <div className="absolute inset-0 bg-linear-to-t from-black/95 via-black/60 to-black/20" />
             <div className="relative p-6 sm:p-8 flex flex-col gap-4 text-white">
                 <div className="flex items-center gap-2">
-                    <Badge className="bg-primary hover:bg-primary/90 text-primary-foreground">Sorotan Utama</Badge>
+                    <Badge className="bg-primary hover:bg-primary/90 text-primary-foreground">Featured</Badge>
                     <Badge variant="outline" className="text-white border-white/30 bg-white/10 backdrop-blur-sm">
-                        Artikel publik
+                        Public article
                     </Badge>
                 </div>
                 <CardTitle className="text-2xl sm:text-4xl font-extrabold leading-tight text-white">
@@ -44,12 +44,12 @@ export function BlogHero({ article }: BlogHeroProps) {
                             <span className="text-xs sm:text-sm font-medium text-white">{article.author}</span>
                             <span className="text-xs text-white/70 flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
-                                {new Date(article.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "short" })}
+                                {new Date(article.created_at).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
                             </span>
                         </div>
                     </div>
                     <Button render={<Link to={`/blogs/${article.slug}`} />} size="sm" className="gap-1.5 bg-white text-black hover:bg-white/90">
-                        Baca Artikel <ArrowRight className="h-4 w-4" />
+                        Read Article <ArrowRight className="h-4 w-4" />
                     </Button>
                 </div>
             </div>

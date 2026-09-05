@@ -15,7 +15,7 @@ export function Cover({ title, meta, badges = [], imageSrc = "/images/hero.jpg" 
         <section className="w-full">
             <div className="container mx-auto">
                 <div className="relative h-80 lg:h-[75vh] w-full overflow-hidden">
-                    {/* Background Gambar Parallax dengan Pure CSS */}
+                    {/* Parallax image background with pure CSS. */}
                     <div
                         className="absolute inset-0 w-full h-full bg-cover bg-center bg-fixed"
                         style={{ backgroundImage: `url(${imageSrc})` }}

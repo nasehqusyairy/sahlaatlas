@@ -1,4 +1,4 @@
-// Tabel perantara untuk menghubungkan Discount dan Product
+// Join table connecting discounts and products.
 export type ProductDiscount = {
     id: string;
     product_id: string;   // Produk mana

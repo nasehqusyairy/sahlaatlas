@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { motion, type Variants } from "motion/react";
 
 export function HeroSection() {
-    // Hook sederhana untuk mendeteksi layar besar (lg >= 1024px)
+    // Simple hook for detecting large screens (lg >= 1024px).
     const [isLg, setIsLg] = useState(false);
 
     useEffect(() => {
@@ -16,7 +16,7 @@ export function HeroSection() {
         return () => window.removeEventListener("resize", checkLg);
     }, []);
 
-    // Variant untuk ketiga span (gerakan linear dari kiri)
+    // Variant for the three spans (linear motion from the left).
     const spanVariants: Variants = {
         hidden: { x: "-100%" },
         visible: {
@@ -28,7 +28,7 @@ export function HeroSection() {
         },
     };
 
-    // Variant untuk tombol "See all" (gerakan linear dari kanan)
+    // Variant for the "See all" button (linear motion from the right).
     const buttonVariants: Variants = {
         hidden: { x: "100%" },
         visible: {
@@ -44,7 +44,7 @@ export function HeroSection() {
     return (
         <section id="home">
             <div className="h-80 lg:h-[75vh] relative overflow-hidden flex items-end container mx-auto">
-                {/* Background Gambar dengan Clip Path Responsive (5% mobile, 20% desktop) */}
+                {/* Image background with a responsive clip path (5% mobile, 20% desktop). */}
                 <motion.img
                     src="/images/hero.jpg"
                     alt="Hero Background"
@@ -60,7 +60,7 @@ export function HeroSection() {
                     }}
                 />
 
-                {/* Tombol See All di Pojok Kanan Atas dengan Desain Mirip Span & Transisi dari Kanan */}
+                {/* See All button in the top-right corner with matching span styling and a right-side transition. */}
                 {/* <motion.div
                     className="absolute top-2 right-0 z-20 overflow-hidden"
                     initial="hidden"

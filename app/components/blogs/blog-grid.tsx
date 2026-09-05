@@ -50,13 +50,13 @@ export function BlogGrid({ articles, hasMore: initialHasMore, offset }: BlogGrid
                             <EmptyMedia variant={'icon'} className="bg-primary">
                                 <FileQuestion className="text-primary-foreground" />
                             </EmptyMedia>
-                            <EmptyTitle>Artikel Tidak Ditemukan</EmptyTitle>
+                            <EmptyTitle>No Articles Found</EmptyTitle>
                             <EmptyDescription>
-                                Coba ubah kata kunci pencarian atau tag yang dipilih.
+                                Try changing your search keywords or selected tags.
                             </EmptyDescription>
                         </EmptyHeader>
                         <Button variant="outline" size="sm" onClick={() => navigate("/blogs")}>
-                            Reset Semua Filter
+                            Reset All Filters
                         </Button>
                     </Empty>
                 </CardContent>
@@ -88,7 +88,7 @@ export function BlogGrid({ articles, hasMore: initialHasMore, offset }: BlogGrid
                                 </CardTitle>
                                 <CardDescription className="flex items-center gap-1">
                                     <Calendar className="h-3 w-3" />
-                                    {new Date(article.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
+                                    {new Date(article.created_at).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}
                                 </CardDescription>
                             </CardHeader>
                         </div>
@@ -102,7 +102,7 @@ export function BlogGrid({ articles, hasMore: initialHasMore, offset }: BlogGrid
             {hasMore && (
                 <Button variant="outline" className="mx-auto" onClick={loadMore} disabled={fetcher.state !== "idle"}>
                     {fetcher.state !== "idle" && <LoaderCircle className="animate-spin" />}
-                    {fetcher.state !== "idle" ? "Memuat..." : "Load more"}
+                    {fetcher.state !== "idle" ? "Loading..." : "Load more"}
                 </Button>
             )}
         </div>
