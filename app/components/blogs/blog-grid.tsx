@@ -1,4 +1,4 @@
-import { Calendar, LoaderCircle } from "lucide-react";
+import { Calendar, LoaderCircle, User } from "lucide-react";
 import { Link, useFetcher, useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
@@ -79,7 +79,7 @@ export function BlogGrid({ articles, hasMore: initialHasMore, offset }: BlogGrid
                             </CardHeader>
                         </div>
                         <CardFooter className="flex items-center gap-2 border-t pt-4">
-                            <Avatar className="h-6 w-6"><AvatarFallback>{article.author[0]}</AvatarFallback></Avatar>
+                            <Avatar className="size-6"><AvatarFallback><User className="size-4" /></AvatarFallback></Avatar>
                             <span className="text-xs font-medium">{article.author}</span>
                         </CardFooter>
                     </Card>

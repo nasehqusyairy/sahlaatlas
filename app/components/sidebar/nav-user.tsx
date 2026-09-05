@@ -21,9 +21,6 @@ export function NavUser() {
   const name = user?.user_metadata?.full_name || email.split("@")[0];
   const avatar = user?.user_metadata?.avatar_url;
 
-  // Inisial untuk fallback Avatar jika tidak ada gambar
-  const initials = name.slice(0, 2).toUpperCase();
-
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -31,7 +28,7 @@ export function NavUser() {
           <Avatar className="h-8 w-8">
             {avatar && <AvatarImage src={avatar} alt={name} />}
             <AvatarFallback className="text-xs">
-              {initials || <User className="size-4" />}
+              <User className="size-4" />
             </AvatarFallback>
           </Avatar>
           <div className="grid flex-1 text-start text-sm leading-tight">
