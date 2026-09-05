@@ -30,7 +30,7 @@ export function ProductForm({ product, errorMessage }: ProductFormProps) {
             </Field>
 
             {/* Field Description */}
-            {/* <Field>
+            <Field>
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                     id="description"
@@ -38,9 +38,9 @@ export function ProductForm({ product, errorMessage }: ProductFormProps) {
                     defaultValue={product?.description ?? ""}
                     rows={3}
                 />
-            </Field> */}
+            </Field>
 
-            {/* Field Price & Stock */}
+            {/* Field Price */}
             <Field>
                 <Label htmlFor="price">Price (Rp)</Label>
                 <Input

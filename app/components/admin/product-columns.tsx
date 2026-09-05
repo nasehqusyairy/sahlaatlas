@@ -31,14 +31,16 @@ export const getProductColumns = (arg: {
             accessorKey: "title",
             header: "Title",
             cell: ({ row }) => (
-                <div>
-                    <p className="font-medium text-foreground">{row.original.title}</p>
-                    {row.original.description && (
-                        <p className="text-xs text-muted-foreground line-clamp-1">
-                            {row.original.description}
-                        </p>
-                    )}
-                </div>
+                <p className="font-medium text-foreground line-clamp-2 max-w-xs text-wrap">{row.original.title}</p>
+            ),
+        },
+        {
+            accessorKey: "descripton",
+            header: "Description",
+            cell: ({ row }) => (
+                <p className="text-xs text-muted-foreground line-clamp-3 max-w-xs text-wrap">
+                    {row.original.description || '-'}
+                </p>
             ),
         },
         {
