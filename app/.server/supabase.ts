@@ -6,6 +6,8 @@ import {
 
 export function createClient(request: Request) {
   const headers = new Headers();
+  // Di dalam file vite.config.ts atau script build Node.js
+  console.log(process.env.VITE_SUPABASE_URL) // Terbaca!
 
   const supabase = createServerClient(
     process.env.VITE_SUPABASE_URL!,
