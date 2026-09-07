@@ -1,25 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Tag } from "~/models/tag";
 import { archiveRecord, restoreRecord, uploadStorageFile } from "./base";
+import { normalizeTagNames, syncProductTags } from "./tag";
+import type { PaginationOptions } from "~/models/pagination-options";
+import type { Product, ProductWithTagLinks } from "~/models/product";
 
 export type ProductStatus = "active" | "archived" | "all";
-
-type GetProductsPageOptions = {
-    search?: string;
-    limit?: number | null;
-    offset?: number;
-};
-
-export type Product = {
-    id: string;
-    title: string;
-    description: string | null;
-    price: number;
-    stock: number;
-    img: string | null;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string | null;
-};
 
 export async function getProducts(
     supabase: SupabaseClient,
@@ -32,12 +18,20 @@ export async function getProducts(
 export async function getProductsPage(
     supabase: SupabaseClient,
     status: ProductStatus = "active",
-    options: GetProductsPageOptions = {},
+    options: PaginationOptions = {},
 ) {
     const limit = options.limit === null ? null : Math.min(Math.max(options.limit ?? 10, 1), 100);
     const offset = Math.max(options.offset ?? 0, 0);
+
+    // Tentukan relasi inner/left join berdasarkan filter tag
+    const hasTagFilter = (options.tagNames?.length ?? 0) > 0;
+    const tagRelation = hasTagFilter
+        ? "product_tags!inner(tags!inner(id, name))"
+        : "product_tags(tags(id, name))";
+
     let query = supabase.from("products").select(`
         *,
+        ${tagRelation},
         product_discount (
             discounts (*)
         )
@@ -59,12 +53,25 @@ export async function getProductsPage(
         query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
     }
 
+    if (hasTagFilter) {
+        query = query.in("product_tags.tags.name", options.tagNames ?? []);
+    }
+
     query = query.order("created_at", { ascending: false });
     if (limit !== null) query = query.range(offset, offset + limit - 1);
 
     const { data, count, error } = await query;
     if (error) throw new Response(error.message, { status: 500 });
-    return { products: data ?? [], total: count ?? 0 };
+
+    // Format hasil query agar properti `tags` rata berbentuk Tag[]
+    const products = (data as ProductWithTagLinks[] ?? []).map((product) => ({
+        ...product,
+        tags: (product.product_tags ?? [])
+            .map((link) => link.tags)
+            .filter(Boolean),
+    })) as Product[];
+
+    return { products, total: count ?? 0 };
 }
 
 export async function archiveProduct(supabase: SupabaseClient, id: string) {
@@ -85,6 +92,7 @@ export async function upsertProduct(
     const description = formData.get("description") as string;
     const price = parseFloat(formData.get("price") as string);
     const stock = parseInt(formData.get("stock") as string, 10) || 0;
+    const tags = normalizeTagNames(String(formData.get("tags") ?? ""));
 
     const imgFile = formData.get("img") as File | null;
     let imgUrl = formData.get("existing_img") as string;
@@ -93,10 +101,6 @@ export async function upsertProduct(
         const { url, error } = await uploadStorageFile(supabase, "product_assets", "images", imgFile);
         if (error) return { error: `Image Upload Error: ${error}` };
         if (url) imgUrl = url;
-    }
-
-    if (intent === "create" && !imgUrl) {
-        return { error: "Product image is required." };
     }
 
     const payload = {
@@ -109,11 +113,28 @@ export async function upsertProduct(
     };
 
     if (intent === "create") {
-        const { error } = await supabase.from("products").insert([payload]);
+        const { data, error } = await supabase
+            .from("products")
+            .insert([payload])
+            .select("id")
+            .single();
+
         if (error) return { error: error.message };
+
+        try {
+            await syncProductTags(supabase, data.id, tags);
+        } catch (error) {
+            return { error: error instanceof Error ? error.message : "Failed to synchronize product tags." };
+        }
     } else {
         const { error } = await supabase.from("products").update(payload).eq("id", id);
         if (error) return { error: error.message };
+
+        try {
+            await syncProductTags(supabase, id, tags);
+        } catch (error) {
+            return { error: error instanceof Error ? error.message : "Failed to synchronize product tags." };
+        }
     }
 
     return { success: true };

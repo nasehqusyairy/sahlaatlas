@@ -1,8 +1,9 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { Archive, Pencil, ArchiveRestore } from "lucide-react";
+import { Archive, Pencil, ArchiveRestore, HelpCircle } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import type { Product } from "~/models/product";
 import type { features } from "~/components/datatable";
+import { Badge } from "../ui/badge";
 
 export const getProductColumns = (arg: {
     onEdit: (product: Product) => void;
@@ -23,7 +24,7 @@ export const getProductColumns = (arg: {
                     />
                 ) : (
                     <div className="h-10 w-10 bg-muted border flex items-center justify-center text-xs text-muted-foreground">
-                        No Image
+                        <HelpCircle />
                     </div>
                 ),
         },
@@ -53,6 +54,19 @@ export const getProductColumns = (arg: {
                     maximumFractionDigits: 0,
                 }).format(row.original.price);
             },
+        },
+        {
+            accessorKey: "tags",
+            header: "Categories",
+            cell: ({ row }) => (
+                <div className="flex flex-wrap gap-1 w-xs">
+                    {row.original.tags?.map((tag) => (
+                        <Badge key={tag.id} variant="outline">
+                            {tag.name}
+                        </Badge>
+                    ))}
+                </div>
+            ),
         },
         {
             id: "actions",

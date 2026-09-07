@@ -3,6 +3,7 @@ import { Field, FieldGroup } from "../ui/field";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { TagsCombobox } from "../tags-combobox";
 
 type ProductFormProps = {
     product?: Product | null;
@@ -17,6 +18,8 @@ export function ProductForm({ product, errorMessage }: ProductFormProps) {
                     {errorMessage}
                 </div>
             )}
+
+            <TagsCombobox defaultTags={product?.tags.map(el => el.name)} label="Categories" />
 
             {/* Field Title */}
             <Field>
@@ -71,7 +74,6 @@ export function ProductForm({ product, errorMessage }: ProductFormProps) {
                     name="img"
                     type="file"
                     accept="image/*"
-                    required={!product?.img}
                 />
             </Field>
         </FieldGroup>
