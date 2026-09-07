@@ -13,7 +13,7 @@ export type NavItem = {
 export const NAVBAR_ITEMS: NavItem[] = [
   { label: "Home", url: "/" },
   { label: "About", url: "/about" },
-  { label: "Products", url: "/products" },
+  { label: "Gallery", url: "#gallery" },
   { label: "Contact", url: "/contact" },
 ];
 

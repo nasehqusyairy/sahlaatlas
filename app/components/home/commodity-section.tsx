@@ -29,7 +29,7 @@ export function CommoditySection() {
     return (
         <section id="about" className="py-16 lg:py-24">
             <div className="container mx-auto px-4">
-                
+
                 <div className="text-center max-w-2xl mx-auto mb-16">
                     <span className="text-sm font-semibold tracking-wider text-muted-foreground uppercase mb-3 block">
                         OUR COMMODITIES
@@ -55,7 +55,7 @@ export function CommoditySection() {
                                     show: { opacity: 1, y: 0, transition: { duration: 0.6, staggerChildren: 0.2 } }
                                 }}
                             >
-                                <motion.div 
+                                <motion.div
                                     variants={{ hidden: { opacity: 0, x: isEven ? 30 : -30 }, show: { opacity: 1, x: 0, transition: { duration: 0.5 } } }}
                                     className={`flex flex-col items-start ${isEven ? "lg:order-2" : "lg:order-1"}`}
                                 >
@@ -66,7 +66,7 @@ export function CommoditySection() {
                                     <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
                                         {item.title}
                                     </h3>
-                                    
+
                                     <p className="text-muted-foreground leading-relaxed text-base lg:text-lg mb-6">
                                         {item.description}
                                     </p>
@@ -76,11 +76,11 @@ export function CommoditySection() {
                                     </Button>
                                 </motion.div>
 
-                                <motion.div 
+                                <motion.div
                                     variants={{ hidden: { opacity: 0, x: isEven ? -30 : 30 }, show: { opacity: 1, x: 0, transition: { duration: 0.5 } } }}
                                     className={`relative w-full h-[350px] sm:h-[420px] overflow-hidden ${isEven ? "lg:order-1" : "lg:order-2"}`}
                                 >
-                                    <img 
+                                    <img
                                         loading="lazy"
                                         src={item.image}
                                         alt={item.alt}
