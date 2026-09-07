@@ -17,6 +17,7 @@ import { Field, FieldGroup } from "../ui/field";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
+import { TagsCombobox } from "../tags-combobox";
 
 type ArticleFormProps = {
     article?: Article | null;
@@ -91,59 +92,7 @@ export function ArticleForm({ article, errorMessage }: ArticleFormProps) {
                 />
             </Field>
 
-            <Field>
-                <Label htmlFor="tags">Tags</Label>
-                <input
-                    ref={tagsInputRef}
-                    id="tags"
-                    name="tags"
-                    type="hidden"
-                    defaultValue={article?.tags?.map((tag) => tag.name).join(", ")}
-                />
-                <Combobox
-                    multiple
-                    value={selectedTags}
-                    onValueChange={(value) => setSelectedTags(value)}
-                    inputValue={tagInputValue}
-                    onInputValueChange={setTagInputValue}
-                    items={tagItems}
-                >
-                    {/* 2. Attach ref={anchor} here */}
-                    <ComboboxChips ref={anchor}>
-                        {selectedTags.map((tag) => (
-                            <ComboboxChip key={tag}>
-                                {tag}
-                            </ComboboxChip>
-                        ))}
-                        <ComboboxChipsInput
-                            aria-label="Add article tags"
-                            placeholder="Type a tag, then press comma"
-                            onKeyDown={(event) => {
-                                if (event.key === ",") {
-                                    event.preventDefault()
-                                    const trimmed = tagInputValue.trim().replace(/,/g, "")
-                                    if (trimmed) {
-                                        addTagFromInput(trimmed)
-                                        setTagInputValue("")
-                                    }
-                                }
-                            }}
-                        />
-                    </ComboboxChips>
-
-                    {/* 3. Connect Content to the anchor so it matches the ComboboxChips width */}
-                    <ComboboxContent anchor={anchor}>
-                        <ComboboxList>
-                            <ComboboxEmpty>No tags found.</ComboboxEmpty>
-                            {rawTags.map((tag) => (
-                                <ComboboxItem key={tag.id} value={tag.name}>
-                                    {tag.name}
-                                </ComboboxItem>
-                            ))}
-                        </ComboboxList>
-                    </ComboboxContent>
-                </Combobox>
-            </Field>
+            <TagsCombobox defaultTags={article?.tags?.map(el => el.name)} />
 
             {/* Field Cover Image */}
             <Field>

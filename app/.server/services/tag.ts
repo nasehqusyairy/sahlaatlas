@@ -83,3 +83,44 @@ export async function syncArticleTags(
         if (error) throw new Error(error.message);
     }
 }
+
+// Contoh implementasi syncProductTags (misal dimasukkan ke tag.ts)
+export async function syncProductTags(
+    supabase: SupabaseClient,
+    productId: string,
+    tagNames: string[]
+) {
+    // 1. Dapatkan atau buat tag yang belum ada
+    const tagIds: string[] = [];
+    for (const name of tagNames) {
+        let { data: tag } = await supabase
+            .from("tags")
+            .select("id")
+            .eq("name", name)
+            .maybeSingle();
+
+        if (!tag) {
+            const { data: newTag, error } = await supabase
+                .from("tags")
+                .insert({ name })
+                .select("id")
+                .single();
+            if (error) throw error;
+            tag = newTag;
+        }
+        tagIds.push(tag.id);
+    }
+
+    // 2. Hapus relasi tag lama untuk produk ini
+    await supabase.from("product_tags").delete().eq("product_id", productId);
+
+    // 3. Insert relasi tag baru
+    if (tagIds.length > 0) {
+        const productTags = tagIds.map((tagId) => ({
+            product_id: productId,
+            tag_id: tagId,
+        }));
+        const { error } = await supabase.from("product_tags").insert(productTags);
+        if (error) throw error;
+    }
+}
