@@ -4,95 +4,94 @@ import { Button } from "../ui/button";
 export function CommoditySection() {
     const commodities = [
         {
+            title: "Indonesian Coffee",
+            description:
+                "Authentic origin coffee grown in rich volcanic soil with distinct regional flavor profiles (Sumatra, Java, Bali, Sulawesi, Nusa Tenggara). Strictly quality-controlled for roasters, wholesalers, and global distributors.",
+            image: "/images/coffee.jpg",
+            alt: "Premium Coffee Beans Harvest",
+        },
+        {
             title: "Indonesian Cocoa",
             description:
                 "Carefully selected beans grown in fertile lands (Kalimantan, Sumatra, Java, Sulawesi, Nusa Tenggara) delivering rich flavor, smooth texture, deep aroma, and consistent quality. Ideal for chocolate manufacturers and food industries.",
+            image: "/images/cocoa.jpg",
+            alt: "Tea Highland Harvest",
         },
         {
             title: "Indonesian Tea",
             description:
                 "Cultivated in highland plantations with volcanic soil and high altitude. Offers natural freshness, distinctive aroma, and superior character across regions like Sumatra, Java, Bali, Sulawesi, and Nusa Tenggara.",
-        },
-        {
-            title: "Indonesian Coffee",
-            description:
-                "Authentic origin coffee grown in rich volcanic soil with distinct regional flavor profiles (Sumatra, Java, Bali, Sulawesi, Nusa Tenggara). Strictly quality-controlled for roasters, wholesalers, and global distributors.",
+            image: "/images/tea.jpg",
+            alt: "Indonesian Commodity Farmers",
         },
     ];
 
     return (
-        <section id="about" className="py-12">
+        <section id="about" className="py-16 lg:py-24">
             <div className="container mx-auto px-4">
-                <motion.div
-                    className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center"
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, amount: 0.2 }}
-                    variants={{ show: { transition: { staggerChildren: 0.18 } } }}
-                >
+                
+                <div className="text-center max-w-2xl mx-auto mb-16">
+                    <span className="text-sm font-semibold tracking-wider text-muted-foreground uppercase mb-3 block">
+                        OUR COMMODITIES
+                    </span>
+                    <h2 className="text-3xl lg:text-5xl font-bold leading-tight">
+                        Quality Products from Indonesia
+                    </h2>
+                </div>
 
-                    {/* Images: placed first in DOM but visually ordered to the right on lg */}
-                    <motion.div variants={{}} className="relative w-full max-w-md mx-auto lg:max-w-none pt-10 pr-6 pb-14 pl-6 lg:order-2">
-                        <motion.div variants={{ hidden: {}, show: { transition: { staggerChildren: 0.18 } } }}>
-                            <motion.div variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }} className="absolute top-0 left-0 w-2/5 h-40 sm:h-50 z-10 border-8 border-muted">
-                                <img loading="lazy"
-                                    src="/images/cocoa.jpg"
-                                    alt="Tea Highland Harvest"
-                                    className="w-full h-full object-cover"
-                                />
-                            </motion.div>
+                <div className="space-y-20 lg:space-y-32">
+                    {commodities.map((item, index) => {
+                        const isEven = index % 2 === 1;
 
-                            <motion.div variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }} className="w-4/5 h-80 sm:h-105 mx-auto relative z-0">
-                                <img loading="lazy"
-                                    src="/images/coffee.jpg"
-                                    alt="Indonesian Commodity Farmers"
-                                    className="w-full h-full object-cover"
-                                />
-                            </motion.div>
-
-                            <motion.div variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }} className="absolute bottom-0 right-0 w-3/5 h-55 sm:h-70 z-20 border-8 border-muted">
-                                <img loading="lazy"
-                                    src="/images/tea.jpg"
-                                    alt="Premium Coffee Beans Harvest"
-                                    className="w-full h-full object-cover"
-                                />
-                            </motion.div>
-                        </motion.div>
-                    </motion.div>
-
-                    {/* Konten Teks */}
-                    <motion.div variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }} className="flex flex-col items-start">
-
-                        <motion.h2 variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }} className="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
-                            Our Commodities
-                        </motion.h2>
-
-                        {/* Custom Ordered List */}
-                        <ol className="space-y-6 mb-8 w-full">
-                            {commodities.map((item, index) => (
-                                <motion.li key={index} variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } }} className="flex items-start gap-4">
-                                    {/* Angka dengan ukuran lebih besar & background secondary */}
-                                    <span className="flex items-center justify-center min-w-10 h-10 bg-secondary text-secondary-foreground font-bold text-lg shrink-0">
-                                        {index + 1}
+                        return (
+                            <motion.div
+                                key={index}
+                                className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center"
+                                initial="hidden"
+                                whileInView="show"
+                                viewport={{ once: true, amount: 0.2 }}
+                                variants={{
+                                    hidden: { opacity: 0, y: 30 },
+                                    show: { opacity: 1, y: 0, transition: { duration: 0.6, staggerChildren: 0.2 } }
+                                }}
+                            >
+                                <motion.div 
+                                    variants={{ hidden: { opacity: 0, x: isEven ? 30 : -30 }, show: { opacity: 1, x: 0, transition: { duration: 0.5 } } }}
+                                    className={`flex flex-col items-start ${isEven ? "lg:order-2" : "lg:order-1"}`}
+                                >
+                                    <span className="flex items-center justify-center w-12 h-12 bg-secondary text-secondary-foreground font-bold text-xl mb-6">
+                                        0{index + 1}
                                     </span>
 
-                                    <div>
-                                        <h3 className="text-xl font-semibold text-foreground mb-1">
-                                            {item.title}
-                                        </h3>
-                                        <p className="text-muted-foreground leading-relaxed text-sm lg:text-base mb-4">
-                                            {item.description}
-                                        </p>
-                                        <Button variant="outline" size="lg" className={'w-full lg:w-auto'}>
-                                            See More
-                                        </Button>
-                                    </div>
-                                </motion.li>
-                            ))}
-                        </ol>
-                    </motion.div>
+                                    <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-4">
+                                        {item.title}
+                                    </h3>
+                                    
+                                    <p className="text-muted-foreground leading-relaxed text-base lg:text-lg mb-6">
+                                        {item.description}
+                                    </p>
 
-                </motion.div>
+                                    <Button variant="outline" size="lg" className="w-full lg:w-auto">
+                                        See More
+                                    </Button>
+                                </motion.div>
+
+                                <motion.div 
+                                    variants={{ hidden: { opacity: 0, x: isEven ? -30 : 30 }, show: { opacity: 1, x: 0, transition: { duration: 0.5 } } }}
+                                    className={`relative w-full h-[350px] sm:h-[420px] overflow-hidden ${isEven ? "lg:order-1" : "lg:order-2"}`}
+                                >
+                                    <img 
+                                        loading="lazy"
+                                        src={item.image}
+                                        alt={item.alt}
+                                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                                    />
+                                </motion.div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+
             </div>
         </section>
     );
