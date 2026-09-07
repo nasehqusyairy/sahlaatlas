@@ -53,7 +53,7 @@ export function AboutSection() {
                         </motion.h2>
 
                         <motion.p variants={item} className="text-muted-foreground mb-4 leading-relaxed">
-                            PT Sahla Atlas Export is a trusted Indonesian export company specializing in high-quality agricultural commodities. We directly supply premium coffee, cocoa, and tea sourced from dedicated farmers across Indonesia's fertile highlands.
+                            PT Sahla Atlas is a trusted Indonesian export company specializing in high-quality agricultural commodities. We directly supply premium coffee, cocoa, and tea sourced from dedicated farmers across Indonesia's fertile highlands.
                         </motion.p>
 
                         <motion.p variants={item} className="text-muted-foreground mb-8 leading-relaxed">

@@ -6,14 +6,7 @@ import {
     Collapsible,
     CollapsibleContent,
 } from "~/components/ui/collapsible";
-
-// Data item navbar terpusat
-const NAV_ITEMS = [
-    { label: "Home", href: "/" },
-    { label: "About Us", href: "/about" },
-    { label: "Product", href: "/product" },
-    { label: "Blog", href: "/blogs" },
-];
+import { NAVBAR_ITEMS } from "~/models/nav-item";
 
 export function Navbar() {
     // State untuk kontrol menu collapse utama di mobile
@@ -32,10 +25,10 @@ export function Navbar() {
                 {/* Navigation (Desktop) */}
                 <div className="hidden md:flex items-center gap-6">
                     <nav className="flex items-center gap-6 text-sm font-medium">
-                        {NAV_ITEMS.map((item, index) => (
+                        {NAVBAR_ITEMS.map((item, index) => (
                             <Link
                                 key={index}
-                                to={item.href}
+                                to={item.url || '#'}
                                 className="hover:text-primary transition-colors"
                             >
                                 {item.label}
@@ -43,16 +36,16 @@ export function Navbar() {
                         ))}
                     </nav>
 
-                    <Button variant="default" className="gap-2">
+                    {/* <Button variant="default" className="gap-2">
                         Shopping Cart
-                    </Button>
+                    </Button> */}
                 </div>
 
                 {/* Mobile Action Buttons */}
                 <div className="flex md:hidden items-center gap-2">
-                    <Button size="icon" aria-label="Shopping Cart">
+                    {/* <Button size="icon" aria-label="Shopping Cart">
                         <ShoppingCart className="w-4 h-4" />
-                    </Button>
+                    </Button> */}
 
                     {/* Button Toggle Mobile Menu */}
                     <Button
@@ -74,10 +67,10 @@ export function Navbar() {
             <Collapsible open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen} className="md:hidden">
                 <CollapsibleContent className="border-t px-4 py-4 bg-background shadow-lg transition-all">
                     <nav className="flex flex-col gap-1">
-                        {NAV_ITEMS.map((item, index) => (
+                        {NAVBAR_ITEMS.map((item, index) => (
                             <Link
                                 key={index}
-                                to={item.href}
+                                to={item.url || '#'}
                                 className="text-base font-medium px-3 py-2 hover:bg-card hover:text-primary transition-colors"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >

@@ -39,7 +39,7 @@ export function ContactSection() {
                                 </div>
                                 <div>
                                     <p className="text-xs">Phone / Whatsapp</p>
-                                    <p className="text-base font-medium">+62 81379264406</p>
+                                    <a href="https://wa.me/6285121533905" target="_blank" className="text-base font-medium">+6285121533905</a>
                                 </div>
                             </div>
 
@@ -49,7 +49,7 @@ export function ContactSection() {
                                 </div>
                                 <div>
                                     <p className="text-xs">Email</p>
-                                    <p className="text-base font-medium">infosahlaatlas@gmail.com</p>
+                                    <a href="mailto:info@sahlaatlas.com" target="_blank" className="text-base font-medium">info@sahlaatlas.com</a>
                                 </div>
                             </div>
 
@@ -59,7 +59,7 @@ export function ContactSection() {
                                 </div>
                                 <div>
                                     <p className="text-xs">Website</p>
-                                    <p className="text-base font-medium">www.sahlaatlas.com</p>
+                                    <p className="text-base font-medium">sahlaatlas.com</p>
                                 </div>
                             </div>
 

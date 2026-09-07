@@ -12,38 +12,36 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "~/components/ui/collapsible"
-import { ChevronRightIcon } from "lucide-react";
-import { navitems } from "~/models/nav-item";
+import { ChevronRightIcon, HelpCircle } from "lucide-react";
+import { SIDEBAR_ITEMS, type NavItem } from "~/models/nav-item";
 
 export function NavItems() {
     const { pathname } = useLocation()
 
     return (
         <>
-            {navitems.map((item) => (
-                item.children?.length ? (
+            {SIDEBAR_ITEMS.map((item) => {
+                const Icon = item.icon || HelpCircle
+                return (item.children?.length ? (
                     <CollapsibleNavItem key={item.label} item={item} pathname={pathname} />
                 ) : (
                     <SidebarMenuItem key={item.label}>
                         <SidebarMenuButton render={<NavLink to={item.url || '/admin'} end />}>
-                            <item.icon />
+                            <Icon />
                             <span>{item.label}</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
-                )
-            ))}
+                ))
+            })}
         </>
     )
 }
 
-function CollapsibleNavItem({
-    item,
-    pathname,
-}: {
-    item: (typeof navitems)[number]
+function CollapsibleNavItem(props: {
+    item: NavItem
     pathname: string
 }) {
-    const hasActiveChild = item.children?.some((child) => pathname === child.url || pathname.startsWith(`${child.url}/`)) ?? false
+    const hasActiveChild = props.item.children?.some((child) => props.pathname === child.url || props.pathname.startsWith(`${child.url}/`)) ?? false
     const [isOpen, setIsOpen] = useState(hasActiveChild)
 
     useEffect(() => {
@@ -52,6 +50,8 @@ function CollapsibleNavItem({
         }
     }, [hasActiveChild])
 
+    const Icon = props.item.icon || HelpCircle
+
     return (
         <Collapsible
             open={hasActiveChild || isOpen}
@@ -59,17 +59,17 @@ function CollapsibleNavItem({
             className="group/collapsible"
             render={<SidebarMenuItem />}
         >
-            <CollapsibleTrigger render={<SidebarMenuButton tooltip={item.label} />}>
-                <item.icon />
-                <span>{item.label}</span>
+            <CollapsibleTrigger render={<SidebarMenuButton tooltip={props.item.label} />}>
+                <Icon />
+                <span>{props.item.label}</span>
                 <ChevronRightIcon className="ms-auto transition-transform duration-200 group-data-open/collapsible:rotate-90" />
             </CollapsibleTrigger>
             <CollapsibleContent>
                 <SidebarMenuSub>
-                    {item.children?.map((child) => (
+                    {props.item.children?.map((child) => (
                         <SidebarMenuSubItem key={child.label}>
                             <SidebarMenuSubButton
-                                isActive={pathname === child.url || pathname.startsWith(`${child.url}/`)}
+                                isActive={props.pathname === child.url || props.pathname.startsWith(`${child.url}/`)}
                                 render={<NavLink to={child.url} end />}
                             >
                                 <span>{child.label}</span>

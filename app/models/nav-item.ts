@@ -3,14 +3,21 @@ import { Gauge, LetterText, ShoppingBasket, type LucideIcon } from "lucide-react
 export type NavItem = {
   label: string
   url?: string
-  icon: LucideIcon
+  icon?: LucideIcon
   children?: {
     label: string
     url: string
   }[]
 }
 
-export const navitems: NavItem[] = [
+export const NAVBAR_ITEMS: NavItem[] = [
+  { label: "Home", url: "/" },
+  { label: "About", url: "/about" },
+  { label: "Products", url: "/products" },
+  { label: "Contact", url: "/contact" },
+];
+
+export const SIDEBAR_ITEMS: NavItem[] = [
   {
     label: "Dashboard",
     url: "/admin",

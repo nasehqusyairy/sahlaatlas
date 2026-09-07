@@ -1,5 +1,6 @@
-import { SiFacebook, SiInstagram, SiX, SiYoutube } from '@icons-pack/react-simple-icons';
+import { NAVBAR_ITEMS } from '~/models/nav-item';
 import { buttonVariants } from './ui/button';
+import { Facebook, Linkedin, Pinterest } from "react-bootstrap-icons";
 
 export function PageFooter() {
     return (
@@ -25,10 +26,13 @@ export function PageFooter() {
                     <div>
                         <h3 className="font-semibold text-lg mb-4">Navigations</h3>
                         <ul className="space-y-2 text-sm opacity-80">
-                            <li><a href="#" className="hover:opacity-100 hover:underline transition-all">Home</a></li>
-                            <li><a href="#products" className="hover:opacity-100 hover:underline transition-all">About</a></li>
-                            <li><a href="#about" className="hover:opacity-100 hover:underline transition-all">Product</a></li>
-                            <li><a href="#about" className="hover:opacity-100 hover:underline transition-all">Blog</a></li>
+                            {NAVBAR_ITEMS.map((item, index) => (
+                                <li key={index}>
+                                    <a href={item.url} className="hover:opacity-100 hover:underline transition-all">
+                                        {item.label}
+                                    </a>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
@@ -36,20 +40,17 @@ export function PageFooter() {
                     <div>
                         <h3 className="font-semibold text-lg mb-4">Follow Us</h3>
                         <p className="text-sm opacity-80 mb-4">
-                            Stay updated with our latest harvest, market trends, and global shipments:
+                            Stay updated with our latest harvest, market trends, and global shipments
                         </p>
                         <div className="flex gap-4">
-                            <a href="#" aria-label="Facebook" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
-                                <SiFacebook className="size-5" />
+                            <a href="https://www.facebook.com/profile.php?id=61593242036051" target='_blank' aria-label="Facebook" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                                <Facebook className="size-5" />
                             </a>
-                            <a href="#" aria-label="Instagram" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
-                                <SiInstagram className="size-5" />
+                            <a href="www.linkedin.com/in/sahlaatlas" target='_blank' aria-label="Instagram" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                                <Linkedin className="size-5" />
                             </a>
                             <a href="#" aria-label="Twitter" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
-                                <SiX className="size-5" />
-                            </a>
-                            <a href="#" aria-label="Youtube" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
-                                <SiYoutube className="size-5" />
+                                <Pinterest className="size-5" />
                             </a>
                         </div>
                     </div>
