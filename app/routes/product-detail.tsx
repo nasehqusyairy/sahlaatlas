@@ -4,36 +4,35 @@ import { createClient } from "~/.server/supabase";
 import { getPublishedArticleBySlug } from "~/.server/services/article";
 import type { ComponentProps } from "~/models/route";
 import { ArticleView } from "~/components/article-view";
+import { getProductsPage } from "~/.server/services/product";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     const slug = params.slug;
     if (!slug) throw new Response("Article not found", { status: 404 });
-
     const { supabase } = createClient(request);
+
+    // Fetch only the article with the slug.
     const article = await getPublishedArticleBySlug(supabase, slug);
 
     if (!article || !article.content) {
-        throw new Response("Article content not found", { status: 404 });
+        throw new Response("Page not found", { status: 404 });
     }
 
-    // 1. Robustly extract the Storage path.
+    // 1. Extract the Supabase Storage path.
     const BUCKET_NAME = "article_assets";
     let storagePath: string;
 
     try {
         const contentUrl = new URL(article.content);
-        // Find the position after the bucket name in the Supabase URL path.
         const bucketPathSegment = `/${BUCKET_NAME}/`;
         const pathIndex = contentUrl.pathname.indexOf(bucketPathSegment);
 
         if (pathIndex !== -1) {
             storagePath = decodeURIComponent(contentUrl.pathname.slice(pathIndex + bucketPathSegment.length));
         } else {
-            // Fallback jika article.content menyimpannya sebagai relatif path/key saja
             storagePath = contentUrl.pathname.replace(/^\/+/, "");
         }
     } catch {
-        // Fallback jika article.content bukan URL valid (hanya string path misal: "folder/file.docx")
         storagePath = article.content.replace(/^\/+/, "");
     }
 
@@ -44,12 +43,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
     if (error || !contentFile) {
         console.error("Storage download error:", error);
-        throw new Response(error?.message ?? "Article content could not be downloaded", { status: 502 });
+        throw new Response(error?.message ?? "Failed to download About Us content", { status: 502 });
     }
 
-    // 3. Convert DOCX to HTML with Mammoth using a safe ArrayBuffer conversion.
+    // 3. Convert DOCX to HTML with Mammoth.
     const blobBuffer = await contentFile.arrayBuffer();
-    const nodeBuffer = Buffer.from(blobBuffer); // Mengubah ke Node Buffer agar Mammoth berjalan lancar di SSR
+    const nodeBuffer = Buffer.from(blobBuffer);
 
     const { value: html } = await mammoth.convertToHtml(
         { buffer: nodeBuffer },
@@ -63,11 +62,21 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         }
     );
 
-    return { article, html };
+    const { products } = await getProductsPage(supabase, 'active', { tagNames: ['coffee'] })
+
+    return { article, html, products };
 }
 
-export default function BlogDetail({ loaderData }: ComponentProps<typeof loader>) {
-    const { article, html } = loaderData;
+export default function ProductDetail({ loaderData }: ComponentProps<typeof loader>) {
+    const { article, html, products } = loaderData;
 
-    return <ArticleView article={article} html={html} />;
+
+    return (
+        <>
+            <ArticleView article={article} html={html} />
+
+            {/* product list */}
+            {/* ... */}
+        </>
+    );
 }
