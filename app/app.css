@@ -130,7 +130,7 @@
     cursor: pointer;
   }
   html {
-    @apply font-sans;
+    @apply font-sans scroll-smooth;
   }
 
   /* Class kustom untuk artikel hasil konversi DOCX (shadcn/ui theme compliant) */

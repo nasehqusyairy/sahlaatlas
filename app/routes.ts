@@ -19,6 +19,9 @@ export default [
 
         route('products', 'routes/admin/products.tsx'),
         route('products/archived', 'routes/admin/products-archived.tsx'),
+
+        route('photos', 'routes/admin/photos.tsx'),
+        route('photos/archived', 'routes/admin/photos-archived.tsx'),
     ]),
     route('/login', 'routes/login.tsx')
 ] satisfies RouteConfig;

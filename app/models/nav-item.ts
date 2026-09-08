@@ -1,4 +1,4 @@
-import { Gauge, LetterText, ShoppingBasket, type LucideIcon } from "lucide-react";
+import { Gauge, Images, LetterText, ShoppingBasket, type LucideIcon } from "lucide-react";
 
 export type NavItem = {
   label: string
@@ -53,6 +53,20 @@ export const SIDEBAR_ITEMS: NavItem[] = [
       {
         label: 'Archived',
         url: '/admin/products/archived'
+      },
+    ]
+  },
+  {
+    label: "Photos",
+    icon: Images,
+    children: [
+      {
+        label: 'Available',
+        url: '/admin/photos'
+      },
+      {
+        label: 'Archived',
+        url: '/admin/photos/archived'
       },
     ]
   },

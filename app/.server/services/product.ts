@@ -1,5 +1,4 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Tag } from "~/models/tag";
 import { archiveRecord, restoreRecord, uploadStorageFile } from "./base";
 import { normalizeTagNames, syncProductTags } from "./tag";
 import type { PaginationOptions } from "~/models/pagination-options";

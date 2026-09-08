@@ -1,56 +1,8 @@
 import React, { useState } from "react"
 import { motion, AnimatePresence, type Variants } from "motion/react"
 import { X, Maximize2 } from "lucide-react"
-
-export type GalleryItem = {
-    id?: string | number
-    title: string
-    description: string
-    image: string
-}
-
-const defaultGalleryItems: GalleryItem[] = [
-    {
-        title: 'Partnership Session 1',
-        description: 'Direct meeting and sample handover with international partners to discuss quality standards and trade agreements.',
-        image: '/images/gallery1.jpeg'
-    },
-    {
-        title: 'Partnership Session 2',
-        description: 'Formal discussion and agreement exchange between local representatives inside our facility meeting space.',
-        image: '/images/gallery2.jpeg'
-    },
-    {
-        title: 'Farmer Collaboration',
-        description: 'Gathering with local agricultural producers and community leaders to evaluate harvest output and processing methods.',
-        image: '/images/gallery3.jpeg'
-    },
-    {
-        title: 'Processing Facility 1',
-        description: 'Overview of our automated sorting and drying infrastructure used for maintaining uniform commodity standards.',
-        image: '/images/gallery4.jpeg'
-    },
-    {
-        title: 'Processing Facility 2',
-        description: 'Detailed view of the sorting conveyor belt system optimizing production workflow and cleaning stages.',
-        image: '/images/gallery5.jpeg'
-    },
-    {
-        title: 'Warehouse Storage',
-        description: 'Internal warehouse staging area showcasing bulk commodity preparation and distribution readiness.',
-        image: '/images/gallery6.jpeg'
-    },
-    {
-        title: 'Inventory Management',
-        description: 'Organized stacks of packaged commodities awaiting final quality inspection before global export.',
-        image: '/images/gallery7.jpeg'
-    },
-    {
-        title: 'Drying Line System',
-        description: 'High-capacity drying technology applied to reduce moisture and preserve rich aromatic profiles.',
-        image: '/images/gallery8.jpeg'
-    },
-]
+import type { Photo } from "~/models/photo"
+import { Badge } from "~/components/ui/badge"
 
 function getBentoSpanClass(index: number) {
     const patternIndex = index % 6
@@ -98,9 +50,9 @@ const itemVariants: Variants = {
 }
 
 type GalleryCardProps = {
-    item: GalleryItem
+    item: Photo
     index: number
-    onSelect: (item: GalleryItem) => void
+    onSelect: (item: Photo) => void
 }
 
 function BentoGalleryCard({ item, index, onSelect }: GalleryCardProps) {
@@ -115,13 +67,13 @@ function BentoGalleryCard({ item, index, onSelect }: GalleryCardProps) {
             {/* Background Image */}
             <img
                 loading="lazy"
-                src={item.image}
+                src={item.src}
                 alt={item.title}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
 
             {/* Gradient Overlay Gelap */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent opacity-75 group-hover:opacity-90 transition-opacity duration-300" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-90 transition-opacity duration-300 " />
 
             {/* Icon Maximize saat Hover */}
             <div className="absolute top-3 right-3 p-2 bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-100 scale-75">
@@ -129,11 +81,18 @@ function BentoGalleryCard({ item, index, onSelect }: GalleryCardProps) {
             </div>
 
             {/* Konten Teks */}
-            <div className="absolute inset-0 p-5 flex flex-col justify-end text-white z-10 pointer-events-none">
+            <div className="absolute inset-0 p-5 flex flex-col justify-end text-white z-10 pointer-events-none opacity-0 group-hover:opacity-100">
+                <Badge variant="secondary" className="mb-2">
+                    {new Date(item.created_at).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                    })}
+                </Badge>
                 <h3 className="font-bold text-base md:text-lg lg:text-xl text-white leading-tight drop-shadow-md line-clamp-1 group-hover:line-clamp-2 transition-all">
                     {item.title}
                 </h3>
-                <p className="text-white/80 text-xs mt-1 leading-relaxed opacity-0 group-hover:opacity-100 line-clamp-2 transition-all duration-300 drop-shadow-sm">
+                <p className="text-white/80 text-xs mt-1 leading-relaxed line-clamp-2 transition-all duration-300 drop-shadow-sm">
                     {item.description}
                 </p>
             </div>
@@ -142,11 +101,11 @@ function BentoGalleryCard({ item, index, onSelect }: GalleryCardProps) {
 }
 
 interface GallerySectionProps {
-    items?: GalleryItem[]
+    items: Photo[]
 }
 
-export function GallerySection({ items = defaultGalleryItems }: GallerySectionProps) {
-    const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null)
+export function GallerySection({ items }: GallerySectionProps) {
+    const [selectedItem, setSelectedItem] = useState<Photo | null>(null)
 
     return (
         <section id="gallery" className="py-16 bg-primary text-primary-foreground">
@@ -216,13 +175,20 @@ export function GallerySection({ items = defaultGalleryItems }: GallerySectionPr
 
                                 <div className="w-full md:w-2/3 bg-black flex items-center justify-center p-4">
                                     <img
-                                        src={selectedItem.image}
+                                        src={selectedItem.src}
                                         alt={selectedItem.title}
                                         className="w-auto h-auto max-w-full max-h-[75vh] object-contain"
                                     />
                                 </div>
 
                                 <div className="w-full md:w-1/3 p-6 sm:p-8 flex flex-col justify-center bg-primary border-t md:border-t-0 md:border-l border-primary-foreground/10">
+                                    <Badge variant="secondary" className="mb-2">
+                                        {new Date(selectedItem.created_at).toLocaleDateString("id-ID", {
+                                            day: "numeric",
+                                            month: "short",
+                                            year: "numeric",
+                                        })}
+                                    </Badge>
                                     <h3 className="text-2xl font-bold mb-3">{selectedItem.title}</h3>
                                     <p className="text-primary-foreground/80 text-sm leading-relaxed">
                                         {selectedItem.description}

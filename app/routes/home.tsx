@@ -4,10 +4,17 @@ import { ContactSection } from "~/components/home/contact-section";
 import { HeroSection } from "~/components/home/hero-section";
 import { GallerySection } from "~/components/home/gallery-section";
 import { Maintenance } from "~/components/maintenance";
+import { createClient } from "~/.server/supabase";
+import { getPhotosPage } from "~/.server/services/photo";
+import type { LoaderFunctionArgs } from "react-router";
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { supabase } = createClient(request);
+  const { photos } = await getPhotosPage(supabase, "active", { limit: null });
+
   return {
-    is_production: process.env.APP_DEBUG == 'false'
+    is_production: process.env.APP_DEBUG == 'false',
+    photos,
   }
 }
 
@@ -24,7 +31,7 @@ export default function Home(props: {
       <HeroSection />
       <AboutSection />
       <CommoditySection />
-      <GallerySection />
+      <GallerySection items={props.loaderData.photos} />
       <ContactSection />
     </>
   );
