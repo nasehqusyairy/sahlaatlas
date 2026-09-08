@@ -2,7 +2,7 @@ import { AboutSection } from "~/components/home/about-section";
 import { CommoditySection } from "~/components/home/commodity-section";
 import { ContactSection } from "~/components/home/contact-section";
 import { HeroSection } from "~/components/home/hero-section";
-import { MenuSection } from "~/components/home/menu-section";
+import { GallerySection } from "~/components/home/gallery-section";
 import { Maintenance } from "~/components/maintenance";
 
 export async function loader() {
@@ -24,7 +24,7 @@ export default function Home(props: {
       <HeroSection />
       <AboutSection />
       <CommoditySection />
-      <MenuSection />
+      <GallerySection />
       <ContactSection />
     </>
   );
