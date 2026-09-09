@@ -109,7 +109,7 @@ export function GallerySection({ items }: GallerySectionProps) {
 
     return (
         <section id="gallery" className="py-16 bg-primary text-primary-foreground">
-            <div className="container mx-auto px-4 max-w-7xl">
+            <div className="container mx-auto px-4">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}

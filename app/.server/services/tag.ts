@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { slugify } from "~/lib/utils";
 import type { Tag } from "~/models/tag";
-import { slugify } from "./base";
 
 export function normalizeTagNames(value: string) {
     return [...new Set(

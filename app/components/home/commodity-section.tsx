@@ -1,5 +1,7 @@
 import { motion } from "motion/react";
 import { Button } from "../ui/button";
+import { Link } from "react-router";
+import { slugify } from "~/lib/utils";
 
 export function CommoditySection() {
     const commodities = [
@@ -83,7 +85,11 @@ export function CommoditySection() {
                                         <p className="text-muted-foreground leading-relaxed text-sm lg:text-base mb-4">
                                             {item.description}
                                         </p>
-                                        <Button variant="outline" size="lg" className={'w-full lg:w-auto'}>
+                                        <Button
+                                            variant="outline"
+                                            size="lg"
+                                            className={'w-full lg:w-auto'}
+                                            render={<Link to={`/products/${slugify(item.title)}`} />}>
                                             See More
                                         </Button>
                                     </div>

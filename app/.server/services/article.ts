@@ -1,8 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Article } from "~/models/article";
 import type { Tag } from "~/models/tag";
-import { archiveRecord, restoreRecord, slugify, uploadStorageFile } from "./base";
+import { archiveRecord, restoreRecord, uploadStorageFile } from "./base";
 import { normalizeTagNames, syncArticleTags } from "./tag";
+import { slugify } from "~/lib/utils";
 
 export type ArticleStatus = "published" | "draft" | "archived" | "all";
 

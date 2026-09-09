@@ -1,6 +1,7 @@
 import { NAVBAR_ITEMS } from '~/models/nav-item';
 import { buttonVariants } from './ui/button';
 import { Facebook, Linkedin, Pinterest } from "react-bootstrap-icons";
+import { Link } from 'react-router';
 
 export function PageFooter() {
     return (
@@ -43,15 +44,15 @@ export function PageFooter() {
                             Stay updated with our latest harvest, market trends, and global shipments
                         </p>
                         <div className="flex gap-4">
-                            <a href="https://www.facebook.com/profile.php?id=61593242036051" target='_blank' aria-label="Facebook" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                            <Link to="https://www.facebook.com/profile.php?id=61593242036051" target='_blank' aria-label="Facebook" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
                                 <Facebook className="size-5" />
-                            </a>
-                            <a href="www.linkedin.com/in/sahlaatlas" target='_blank' aria-label="Instagram" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                            </Link>
+                            <Link to="www.linkedin.com/in/sahlaatlas" target='_blank' aria-label="Instagram" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
                                 <Linkedin className="size-5" />
-                            </a>
-                            <a href="#" aria-label="Twitter" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                            </Link>
+                            <Link to="#" aria-label="Twitter" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
                                 <Pinterest className="size-5" />
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
