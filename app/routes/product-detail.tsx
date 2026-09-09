@@ -3,6 +3,7 @@ import { type LoaderFunctionArgs } from "react-router";
 import { createClient } from "~/.server/supabase";
 import { getPublishedArticleBySlug } from "~/.server/services/article";
 import type { ComponentProps } from "~/models/route";
+import type { Product } from "~/models/product";
 import { ArticleView } from "~/components/article-view";
 import { getProductsPage } from "~/.server/services/product";
 
@@ -18,7 +19,19 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         throw new Response("Page not found", { status: 404 });
     }
 
-    // 1. Extract the Supabase Storage path.
+    
+    const articleTagNames = 
+        article.tags?.map((t: { name: string }) => t.name.toLowerCase().trim()) ?? [];
+
+    let products: Product[] = [];
+    if (articleTagNames.length > 0) {
+        const productResult = await getProductsPage(supabase, 'active', { 
+            tagNames: articleTagNames 
+        });
+        products = productResult.products ?? [];
+    }
+
+    // 3. Extract the Supabase Storage path.
     const BUCKET_NAME = "article_assets";
     let storagePath: string;
 
@@ -36,7 +49,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         storagePath = article.content.replace(/^\/+/, "");
     }
 
-    // 2. Download the file from Supabase Storage.
+    // 4. Download the file from Supabase Storage.
     const { data: contentFile, error } = await supabase.storage
         .from(BUCKET_NAME)
         .download(storagePath);
@@ -46,7 +59,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         throw new Response(error?.message ?? "Failed to download About Us content", { status: 502 });
     }
 
-    // 3. Convert DOCX to HTML with Mammoth.
+    // 5. Convert DOCX to HTML with Mammoth.
     const blobBuffer = await contentFile.arrayBuffer();
     const nodeBuffer = Buffer.from(blobBuffer);
 
@@ -62,21 +75,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         }
     );
 
-    const { products } = await getProductsPage(supabase, 'active', { tagNames: ['coffee'] })
-
     return { article, html, products };
 }
 
 export default function ProductDetail({ loaderData }: ComponentProps<typeof loader>) {
     const { article, html, products } = loaderData;
 
-
     return (
-        <>
+        <div className="max-w-4xl mx-auto px-4 py-8">
             <ArticleView article={article} html={html} />
 
-            {/* product list */}
-            {/* ... */}
-        </>
+     
+        </div>
     );
 }

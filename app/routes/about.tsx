@@ -38,7 +38,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .download(storagePath);
 
     if (error || !contentFile) {
-        console.error("Storage download error:", error);
+       console.error("Storage download error:", error);
         throw new Response(error?.message ?? "Failed to download About Us content", { status: 502 });
     }
 
