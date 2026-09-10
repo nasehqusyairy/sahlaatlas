@@ -2,7 +2,7 @@ import { AboutSection } from "~/components/home/about-section";
 import { CommoditySection } from "~/components/home/commodity-section";
 import { ContactSection } from "~/components/home/contact-section";
 import { HeroSection } from "~/components/home/hero-section";
-import { GallerySection } from "~/components/home/gallery-section";
+import { GalleryCarousel } from "~/components/gallery-carousel";
 import { Maintenance } from "~/components/maintenance";
 import { createClient } from "~/.server/supabase";
 import { getPhotosPage } from "~/.server/services/photo";
@@ -31,7 +31,7 @@ export default function Home(props: {
       <HeroSection />
       <AboutSection />
       <CommoditySection />
-      <GallerySection items={props.loaderData.photos} aos />
+      <GalleryCarousel items={props.loaderData.photos} />
       <ContactSection />
     </>
   );

@@ -63,7 +63,7 @@ export async function getProductsPage(
 
     if (matchingProductIds) query = query.in("id", matchingProductIds);
 
-    query = query.order("created_at", { ascending: false });
+    query = query.order("updated_at", { ascending: false });
     if (limit !== null) query = query.range(offset, offset + limit - 1);
 
     const { data, count, error } = await query;

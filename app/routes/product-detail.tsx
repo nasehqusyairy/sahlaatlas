@@ -6,7 +6,7 @@ import { getProductsPage } from "~/.server/services/product";
 import type { ComponentProps } from "~/models/route";
 import type { Product } from "~/models/product";
 import { ArticleView } from "~/components/article-view";
-import { ProductList } from "~/components/product-list";
+import { ProductCarousel } from "~/components/product-carousel";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     const slug = params.slug;
@@ -85,7 +85,7 @@ export default function ProductDetail({ loaderData }: ComponentProps<typeof load
     return (
         <>
             <ArticleView article={article} html={html} />
-            <ProductList products={products} />
+            <ProductCarousel products={products} />
         </>
     );
 }
