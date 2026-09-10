@@ -22,15 +22,24 @@ export async function getProductsPage(
     const limit = options.limit === null ? null : Math.min(Math.max(options.limit ?? 10, 1), 100);
     const offset = Math.max(options.offset ?? 0, 0);
 
-    // Tentukan relasi inner/left join berdasarkan filter tag
     const hasTagFilter = (options.tagNames?.length ?? 0) > 0;
-    const tagRelation = hasTagFilter
-        ? "product_tags!inner(tags!inner(id, name))"
-        : "product_tags(tags(id, name))";
+    let matchingProductIds: string[] | null = null;
+
+    if (hasTagFilter) {
+        const { data, error } = await supabase
+            .from("products")
+            .select("id, product_tags!inner(tags!inner(name))")
+            .in("product_tags.tags.name", options.tagNames ?? []);
+
+        if (error) throw new Response(error.message, { status: 500 });
+
+        matchingProductIds = (data ?? []).map((product) => product.id);
+        if (!matchingProductIds.length) return { products: [], total: 0 };
+    }
 
     let query = supabase.from("products").select(`
         *,
-        ${tagRelation},
+        product_tags(tags(id, name)),
         product_discount (
             discounts (*)
         )
@@ -52,9 +61,7 @@ export async function getProductsPage(
         query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`);
     }
 
-    if (hasTagFilter) {
-        query = query.in("product_tags.tags.name", options.tagNames ?? []);
-    }
+    if (matchingProductIds) query = query.in("id", matchingProductIds);
 
     query = query.order("created_at", { ascending: false });
     if (limit !== null) query = query.range(offset, offset + limit - 1);

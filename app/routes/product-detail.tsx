@@ -2,9 +2,11 @@ import mammoth from "mammoth";
 import { type LoaderFunctionArgs } from "react-router";
 import { createClient } from "~/.server/supabase";
 import { getPublishedArticleBySlug } from "~/.server/services/article";
+import { getProductsPage } from "~/.server/services/product";
 import type { ComponentProps } from "~/models/route";
 import type { Product } from "~/models/product";
 import { ArticleView } from "~/components/article-view";
+import { ProductList } from "~/components/product-list";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     const slug = params.slug;
@@ -18,7 +20,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         throw new Response("Page not found", { status: 404 });
     }
 
-    let products: Product[] = [];
+    const tags = article.tags ?? [];
+    if (!tags.some((tag) => tag.name === "product")) {
+        throw new Response("Page not found", { status: 404 });
+    }
+
+    const { products } = tags.length
+        ? await getProductsPage(supabase, "active", {
+            tagNames: tags.map((tag) => tag.name),
+            limit: null,
+        })
+        : { products: [] as Product[] };
 
     // 3. Extract the Supabase Storage path.
     const BUCKET_NAME = "article_assets";
@@ -64,7 +76,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         }
     );
 
-    return { article, html, products };
+    return { article, html, products, tags };
 }
 
 export default function ProductDetail({ loaderData }: ComponentProps<typeof loader>) {
@@ -73,8 +85,7 @@ export default function ProductDetail({ loaderData }: ComponentProps<typeof load
     return (
         <>
             <ArticleView article={article} html={html} />
-
-
+            <ProductList products={products} />
         </>
     );
 }
