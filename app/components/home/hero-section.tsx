@@ -81,7 +81,7 @@ export function HeroSection() {
                 {/* Mask Bingkai Kiri Teks */}
                 <div className="relative z-10 overflow-hidden">
                     <motion.h1
-                        className="flex flex-col items-start"
+                        className="flex flex-col items-start font-heading"
                         initial="hidden"
                         animate="visible"
                     >

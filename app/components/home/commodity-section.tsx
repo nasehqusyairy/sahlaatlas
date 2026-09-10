@@ -68,7 +68,7 @@ export function CommoditySection(props: {
                     <motion.div variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }} className="flex flex-col items-start">
 
                         {props.hideTitle || (
-                            <motion.h2 variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }} className="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
+                            <motion.h2 variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }} className="text-3xl lg:text-5xl font-bold mb-6 leading-tight font-heading">
                                 Our Products
                             </motion.h2>
                         )}

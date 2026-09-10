@@ -23,7 +23,7 @@ export function ContactSection() {
                     {/* Left side: contact information and main message (Slide 9). */}
                     <div className="text-white space-y-6">
                         <div>
-                            <h2 className="text-4xl lg:text-5xl font-bold mt-2 leading-tight">
+                            <h2 className="text-4xl lg:text-5xl font-bold mt-2 leading-tight font-heading">
                                 Get in Touch With Us
                             </h2>
                             <p className="mt-4 text-gray-200 text-lg max-w-lg leading-relaxed">

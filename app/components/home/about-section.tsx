@@ -49,7 +49,7 @@ export function AboutSection() {
                     {/* Konten Teks */}
                     <div className="flex flex-col items-start">
 
-                        <motion.h2 variants={item} className="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
+                        <motion.h2 variants={item} className="text-3xl lg:text-5xl font-bold mb-6 leading-tight font-heading">
                             Bridging Indonesian Agriculture to World Markets
                         </motion.h2>
 
