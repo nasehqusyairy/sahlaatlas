@@ -1,8 +1,4 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
 import { motion, type Variants } from "motion/react";
 
 export function HeroSection() {
@@ -28,19 +24,6 @@ export function HeroSection() {
         },
     };
 
-    // Variant for the "See all" button (linear motion from the right).
-    const buttonVariants: Variants = {
-        hidden: { x: "100%" },
-        visible: {
-            x: "0%",
-            transition: {
-                duration: 1,
-                delay: 1.30, // Selaras dengan animasi gambar
-                ease: "linear",
-            },
-        },
-    };
-
     return (
         <section id="home">
             <div className="h-80 lg:h-[75vh] relative overflow-hidden flex items-end container mx-auto">
@@ -59,24 +42,6 @@ export function HeroSection() {
                         ease: "linear",
                     }}
                 />
-
-                {/* See All button in the top-right corner with matching span styling and a right-side transition. */}
-                {/* <motion.div
-                    className="absolute top-2 right-0 z-20 overflow-hidden"
-                    initial="hidden"
-                    animate="visible"
-                >
-                    <motion.div variants={buttonVariants}>
-                        <Button
-                            variant="ghost"
-                            className="lg:text-xl font-bold py-4 size-auto bg-background"
-                            size={'lg'}
-                        >
-                            See all
-                            <ArrowRight className="size-8 p-2 bg-primary text-primary-foreground" />
-                        </Button>
-                    </motion.div>
-                </motion.div> */}
 
                 {/* Mask Bingkai Kiri Teks */}
                 <div className="relative z-10 overflow-hidden">
@@ -106,6 +71,14 @@ export function HeroSection() {
                             Trusted Worldwide
                         </motion.span>
                     </motion.h1>
+                    <motion.p
+                        variants={spanVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="inline-block uppercase font-bold py-2 lg:py-4 px-4 lg:pr-12 bg-background"
+                    >
+                        Quality agricultural commodities from Indonesia, sourced with care and delivered to international markets
+                    </motion.p>
                 </div>
             </div>
         </section>
