@@ -47,10 +47,10 @@ export function PageFooter() {
                             <Link to="https://www.facebook.com/profile.php?id=61593242036051" target='_blank' aria-label="Facebook" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
                                 <Facebook className="size-5" />
                             </Link>
-                            <Link to="www.linkedin.com/in/sahlaatlas" target='_blank' aria-label="Instagram" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                            <Link to="www.linkedin.com/in/sahlaatlas" target='_blank' aria-label="Linkedin" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
                                 <Linkedin className="size-5" />
                             </Link>
-                            <Link to="#" aria-label="Twitter" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                            <Link to="https://id.pinterest.com/sahlaexport/" aria-label="Pinterest" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
                                 <Pinterest className="size-5" />
                             </Link>
                         </div>

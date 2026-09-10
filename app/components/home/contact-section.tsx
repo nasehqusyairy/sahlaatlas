@@ -5,6 +5,27 @@ import { Button } from "~/components/ui/button";
 import { Mail, Phone, MapPin, Globe } from "lucide-react";
 
 export function ContactSection() {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+        const firstName = String(formData.get("firstName") ?? "").trim();
+        const lastName = String(formData.get("lastName") ?? "").trim();
+        const email = String(formData.get("email") ?? "").trim();
+        const subject = String(formData.get("subject") ?? "").trim();
+        const message = String(formData.get("message") ?? "").trim();
+        const senderName = [firstName, lastName].filter(Boolean).join(" ");
+        const emailSubject = subject || `Website inquiry from ${senderName || "a visitor"}`;
+        const emailBody = [
+            `Name: ${senderName || "Not provided"}`,
+            `Email: ${email || "Not provided"}`,
+            "",
+            message,
+        ].join("\n");
+
+        window.location.href = `mailto:info@sahlaatlas.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    };
+
     return (
         <section
             id="contact"
@@ -85,33 +106,35 @@ export function ContactSection() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                                <form className="space-y-4" onSubmit={handleSubmit}>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium leading-none">First Name</label>
-                                            <Input placeholder="John" />
+                                            <Input name="firstName" placeholder="John" required />
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium leading-none">Last Name</label>
-                                            <Input placeholder="Doe" />
+                                            <Input name="lastName" placeholder="Doe" required />
                                         </div>
                                     </div>
 
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium leading-none">Email Address</label>
-                                        <Input type="email" placeholder="john@company.com" />
+                                        <Input name="email" type="email" placeholder="john@company.com" required />
                                     </div>
 
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium leading-none">Subject</label>
-                                        <Input placeholder="Inquiry about Coffee / Cocoa Export" />
+                                        <Input name="subject" placeholder="Inquiry about Coffee / Cocoa Export" required />
                                     </div>
 
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium leading-none">Message</label>
                                         <Textarea
+                                            name="message"
                                             placeholder="Tell us about your requirements or questions..."
                                             className="min-h-30"
+                                            required
                                         />
                                     </div>
 

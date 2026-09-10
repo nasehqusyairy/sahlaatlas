@@ -10,17 +10,17 @@ export function CommoditySection(props: {
         {
             title: "Indonesian Coffee",
             description:
-                "Authentic origin coffee grown in rich volcanic soil with distinct regional flavor profiles (Sumatra, Java, Bali, Sulawesi, Nusa Tenggara). Strictly quality-controlled for roasters, wholesalers, and global distributors.",
+                "Arabica green coffee beans sourced from renowned origins (Aceh Gayo, Java, Bali, Toraja, Flores), each with distinct regional characteristics from Sumatra's full-bodied earthiness to Sulawesi's bright, fruity notes. Available as green beans, roasted, ground, powder, and capsules for roasters, wholesalers, and global distributors.",
         },
         {
             title: "Indonesian Cocoa",
             description:
-                "Carefully selected beans grown in fertile lands (Kalimantan, Sumatra, Java, Sulawesi, Nusa Tenggara) delivering rich flavor, smooth texture, deep aroma, and consistent quality. Ideal for chocolate manufacturers and food industries.",
+                "Carefully selected cocoa beans from fertile origins (Sumatra, Java, Kalimantan, Sulawesi, Nusa Tenggara) delivering rich flavor, smooth texture, deep aroma, and consistent quality. Offered as natural, alkalized, and black cocoa powder, cocoa butter, and cocoa liquor for chocolate manufacturers and food industries.",
         },
         {
             title: "Indonesian Tea",
             description:
-                "Cultivated in highland plantations with volcanic soil and high altitude. Offers natural freshness, distinctive aroma, and superior character across regions like Sumatra, Java, Bali, Sulawesi, and Nusa Tenggara.",
+                "Cultivated in fertile highland plantations with volcanic soil and high altitude, delivering natural freshness and a refreshing character. Each origin carries its own signature, from Sumatra's strong, bright flavor to Bali's floral delicacy, suited for private labels, tea brands, cafes, and global distributors.",
         },
     ];
 
