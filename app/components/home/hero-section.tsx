@@ -75,7 +75,7 @@ export function HeroSection() {
                         variants={spanVariants}
                         initial="hidden"
                         animate="visible"
-                        className="inline-block uppercase font-bold py-2 lg:py-4 px-4 lg:pr-12 bg-background"
+                        className="inline-block text-lg text-muted-foreground py-2 lg:py-4 px-4 lg:pr-12 bg-background"
                     >
                         Quality agricultural commodities from Indonesia, sourced with care and delivered to international markets
                     </motion.p>
