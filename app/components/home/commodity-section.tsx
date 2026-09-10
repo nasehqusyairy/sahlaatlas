@@ -3,7 +3,9 @@ import { Button } from "../ui/button";
 import { Link } from "react-router";
 import { slugify } from "~/lib/utils";
 
-export function CommoditySection() {
+export function CommoditySection(props: {
+    hideTitle?: boolean
+}) {
     const commodities = [
         {
             title: "Indonesian Coffee",
@@ -23,7 +25,7 @@ export function CommoditySection() {
     ];
 
     return (
-        <section id="about" className="py-12">
+        <section id="about" className="py-4">
             <div className="container mx-auto px-4">
                 <motion.div
                     className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center"
@@ -65,9 +67,11 @@ export function CommoditySection() {
                     {/* Konten Teks */}
                     <motion.div variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }} className="flex flex-col items-start">
 
-                        <motion.h2 variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }} className="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
-                            Our Products
-                        </motion.h2>
+                        {props.hideTitle || (
+                            <motion.h2 variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.45 } } }} className="text-3xl lg:text-5xl font-bold mb-6 leading-tight">
+                                Our Products
+                            </motion.h2>
+                        )}
 
                         {/* Custom Ordered List */}
                         <ol className="space-y-6 mb-8 w-full">

@@ -31,7 +31,7 @@ export default function Home(props: {
       <HeroSection />
       <AboutSection />
       <CommoditySection />
-      <GallerySection items={props.loaderData.photos} />
+      <GallerySection items={props.loaderData.photos} aos />
       <ContactSection />
     </>
   );
