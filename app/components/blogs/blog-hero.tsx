@@ -48,7 +48,7 @@ export function BlogHero({ article }: BlogHeroProps) {
                             </span>
                         </div>
                     </div>
-                    <Button render={<Link to={`/blogs/${article.slug}`} />} size="sm" className="gap-1.5 bg-white text-black hover:bg-white/90">
+                    <Button nativeButton={false} render={<Link to={`/blogs/${article.slug}`} />} size="sm" className="gap-1.5 bg-white text-black hover:bg-white/90">
                         Read Article <ArrowRight className="h-4 w-4" />
                     </Button>
                 </div>

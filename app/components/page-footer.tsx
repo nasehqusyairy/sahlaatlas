@@ -29,9 +29,9 @@ export function PageFooter() {
                         <ul className="space-y-2 text-sm opacity-80">
                             {NAVBAR_ITEMS.map((item, index) => (
                                 <li key={index}>
-                                    <a href={item.url} className="hover:opacity-100 hover:underline transition-all">
+                                    <Link to={item.url || '#'} className="hover:opacity-100 hover:underline transition-all">
                                         {item.label}
-                                    </a>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>
@@ -44,15 +44,15 @@ export function PageFooter() {
                             Stay updated with our latest harvest, market trends, and global shipments
                         </p>
                         <div className="flex gap-4">
-                            <Link to="https://www.facebook.com/profile.php?id=61593242036051" target='_blank' aria-label="Facebook" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                            <a href="https://www.facebook.com/profile.php?id=61593242036051" target='_blank' aria-label="Facebook" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
                                 <Facebook className="size-5" />
-                            </Link>
-                            <Link to="www.linkedin.com/in/sahlaatlas" target='_blank' aria-label="Linkedin" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                            </a>
+                            <a href="www.linkedin.com/in/sahlaatlas" target='_blank' aria-label="Linkedin" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
                                 <Linkedin className="size-5" />
-                            </Link>
-                            <Link to="https://id.pinterest.com/sahlaexport/" aria-label="Pinterest" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
+                            </a>
+                            <a href="https://id.pinterest.com/sahlaexport/" aria-label="Pinterest" className={buttonVariants({ size: 'icon', variant: 'outline' })}>
                                 <Pinterest className="size-5" />
-                            </Link>
+                            </a>
                         </div>
                     </div>
                 </div>

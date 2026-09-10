@@ -62,7 +62,7 @@ export function AboutSection() {
                         </motion.p>
 
                         <motion.div variants={item} className={'w-full lg:w-auto'}>
-                            <Button variant="outline" size="lg" className={'w-full lg:w-auto'} render={<Link to={'/about'} />}>
+                            <Button nativeButton={false} variant="outline" size="lg" className={'w-full lg:w-auto'} render={<Link to={'/about'} />}>
                                 See More
                             </Button>
                         </motion.div>

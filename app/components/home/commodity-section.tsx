@@ -90,6 +90,7 @@ export function CommoditySection(props: {
                                             {item.description}
                                         </p>
                                         <Button
+                                            nativeButton={false}
                                             variant="outline"
                                             size="lg"
                                             className={'w-full lg:w-auto'}
