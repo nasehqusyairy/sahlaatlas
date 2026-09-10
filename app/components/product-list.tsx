@@ -14,7 +14,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
     return (
         <Card>
-            <img src={product.img} alt={product.title} className="aspect-square w-full object-cover" />
+            <img src={product.img} alt={product.title} loading="lazy" className="aspect-square w-full object-cover" />
             <CardHeader>
                 <div className="flex flex-wrap gap-1">
                     {product.tags.map((tag) => (
