@@ -188,11 +188,11 @@
     }
 
     & th {
-      @apply p-4 font-medium text-foreground border-b border-border;
+      @apply p-4 font-medium text-foreground border-b border-border text-wrap;
     }
 
     & td {
-      @apply p-4 border-b border-border text-muted-foreground;
+      @apply p-4 border-b border-border text-muted-foreground text-wrap;
     }
 
     /* Teks Cetak Tebal & Miring */

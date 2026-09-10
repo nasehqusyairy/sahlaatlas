@@ -100,12 +100,10 @@ function BentoGalleryCard({ item, index, onSelect }: GalleryCardProps) {
     )
 }
 
-interface GallerySectionProps {
+export function GallerySection(props: {
     items: Photo[]
-    aos?: boolean
-}
-
-export function GallerySection({ items, aos }: GallerySectionProps) {
+    // aos?: boolean
+}) {
     const [selectedItem, setSelectedItem] = useState<Photo | null>(null)
 
     return (
@@ -125,16 +123,16 @@ export function GallerySection({ items, aos }: GallerySectionProps) {
                 </motion.div>
 
                 {/* Bento Grid Dinamis */}
-                {items.length > 0 ? (
+                {props.items.length > 0 ? (
                     <motion.div
                         variants={containerVariants}
                         initial="hidden"
                         whileInView="visible"
                         // amount: 0.45 menuntut minimal 45% area elemen terlihat di layar sebelum animasi terpicu
-                        viewport={aos ? { once: true, amount: 0.25 } : undefined}
+                        // viewport={aos ? { once: true, amount: 0.45 } : undefined}
                         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-none"
                     >
-                        {items.map((item, index) => (
+                        {props.items.map((item, index) => (
                             <BentoGalleryCard
                                 key={item.id ?? index}
                                 item={item}
