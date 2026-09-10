@@ -35,9 +35,9 @@ export function GalleryCarousel({ items }: { items: Photo[] }) {
                                         <img src={item.src} alt={item.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                                         <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
                                         <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                                            <Badge variant="secondary" className="mb-2">
+                                            {/* <Badge variant="secondary" className="mb-2">
                                                 {new Date(item.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
-                                            </Badge>
+                                            </Badge> */}
                                             <h3 className="line-clamp-2 font-bold">{item.title}</h3>
                                         </div>
                                     </button>

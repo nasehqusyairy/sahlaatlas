@@ -82,13 +82,13 @@ function BentoGalleryCard({ item, index, onSelect }: GalleryCardProps) {
 
             {/* Konten Teks */}
             <div className="absolute inset-0 p-5 flex flex-col justify-end text-white z-10 pointer-events-none opacity-0 group-hover:opacity-100">
-                <Badge variant="secondary" className="mb-2">
+                {/* <Badge variant="secondary" className="mb-2">
                     {new Date(item.created_at).toLocaleDateString("id-ID", {
                         day: "numeric",
                         month: "short",
                         year: "numeric",
                     })}
-                </Badge>
+                </Badge> */}
                 <h3 className="font-bold text-base md:text-lg lg:text-xl text-white leading-tight drop-shadow-md line-clamp-1 group-hover:line-clamp-2 transition-all">
                     {item.title}
                 </h3>
@@ -184,13 +184,13 @@ export function GallerySection(props: {
                                 </div>
 
                                 <div className="w-full md:w-1/3 p-6 sm:p-8 flex flex-col justify-center bg-primary border-t md:border-t-0 md:border-l border-primary-foreground/10">
-                                    <Badge variant="secondary" className="mb-2">
+                                    {/* <Badge variant="secondary" className="mb-2">
                                         {new Date(selectedItem.created_at).toLocaleDateString("id-ID", {
                                             day: "numeric",
                                             month: "short",
                                             year: "numeric",
                                         })}
-                                    </Badge>
+                                    </Badge> */}
                                     <h3 className="text-2xl font-bold mb-3">{selectedItem.title}</h3>
                                     <p className="text-primary-foreground/80 text-sm leading-relaxed">
                                         {selectedItem.description}
