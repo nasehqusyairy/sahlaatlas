@@ -24,7 +24,7 @@ export function PhotoForm({ photo, errorMessage }: PhotoFormProps) {
 
             <Field>
                 <Label htmlFor="title">Title</Label>
-                <Input id="title" name="title" defaultValue={photo?.title} required />
+                <Input id="title" name="title" defaultValue={photo?.title || 'Untitled'} required />
             </Field>
 
             <Field>

@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/carousel";
 import type { Photo } from "~/models/photo";
 
-export function GalleryCarousel({ items }: { items: Photo[] }) {
+export function GalleryCarousel({ items, withDetails }: { items: Photo[]; withDetails?: boolean }) {
     const [selectedItem, setSelectedItem] = useState<Photo | null>(null);
 
     return (
@@ -29,17 +29,18 @@ export function GalleryCarousel({ items }: { items: Photo[] }) {
                                 <CarouselItem key={item.id} className="basis-full ps-2 sm:basis-1/2 lg:basis-1/4">
                                     <button
                                         type="button"
-                                        onClick={() => setSelectedItem(item)}
-                                        className="group relative aspect-square w-full overflow-hidden border border-primary-foreground/15 text-left shadow-lg"
+                                        onClick={withDetails ? () => setSelectedItem(item) : undefined}
+                                        className={`group relative aspect-square w-full overflow-hidden border border-primary-foreground/15 text-left shadow-lg ${withDetails ? "cursor-pointer" : "cursor-default"}`}
                                     >
                                         <img src={item.src} alt={item.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
-                                        <div className="absolute inset-x-0 bottom-0 p-4 text-white">
-                                            {/* <Badge variant="secondary" className="mb-2">
-                                                {new Date(item.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
-                                            </Badge> */}
-                                            <h3 className="line-clamp-2 font-bold">{item.title}</h3>
-                                        </div>
+                                        {withDetails && (
+                                            <>
+                                                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent" />
+                                                <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+                                                    <h3 className="line-clamp-2 font-bold">{item.title}</h3>
+                                                </div>
+                                            </>
+                                        )}
                                     </button>
                                 </CarouselItem>
                             ))}
@@ -51,7 +52,7 @@ export function GalleryCarousel({ items }: { items: Photo[] }) {
                     </div>
                 )}
 
-                {selectedItem && (
+                {withDetails && selectedItem && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" onClick={() => setSelectedItem(null)}>
                         <div className="relative flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden bg-primary md:flex-row" onClick={(event) => event.stopPropagation()}>
                             <button type="button" onClick={() => setSelectedItem(null)} className="absolute right-4 top-4 z-10 bg-black/60 p-2 text-white" aria-label="Close modal">

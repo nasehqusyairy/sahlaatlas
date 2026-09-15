@@ -52,17 +52,18 @@ const itemVariants: Variants = {
 type GalleryCardProps = {
     item: Photo
     index: number
+    withDetails: boolean
     onSelect: (item: Photo) => void
 }
 
-function BentoGalleryCard({ item, index, onSelect }: GalleryCardProps) {
+function BentoGalleryCard({ item, index, withDetails, onSelect }: GalleryCardProps) {
     const spanClass = getBentoSpanClass(index)
 
     return (
         <motion.div
             variants={itemVariants}
-            onClick={() => onSelect(item)}
-            className={`group relative overflow-hidden bg-primary-foreground/5 border border-primary-foreground/15 shadow-lg cursor-pointer transition-all duration-500 hover:shadow-2xl hover:border-primary-foreground/40 ${spanClass}`}
+            onClick={withDetails ? () => onSelect(item) : undefined}
+            className={`group relative overflow-hidden bg-primary-foreground/5 border border-primary-foreground/15 shadow-lg ${withDetails ? "cursor-pointer transition-all duration-500 hover:shadow-2xl hover:border-primary-foreground/40" : ""} ${spanClass}`}
         >
             {/* Background Image */}
             <img
@@ -72,36 +73,31 @@ function BentoGalleryCard({ item, index, onSelect }: GalleryCardProps) {
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
             />
 
-            {/* Gradient Overlay Gelap */}
-            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-90 transition-opacity duration-300 " />
+            {withDetails && (
+                <>
+                    <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-90" />
 
-            {/* Icon Maximize saat Hover */}
-            <div className="absolute top-3 right-3 p-2 bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:scale-100 scale-75">
-                <Maximize2 className="w-4 h-4" />
-            </div>
+                    <div className="absolute right-3 top-3 scale-75 bg-black/60 p-2 text-white opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
+                        <Maximize2 className="h-4 w-4" />
+                    </div>
 
-            {/* Konten Teks */}
-            <div className="absolute inset-0 p-5 flex flex-col justify-end text-white z-10 pointer-events-none opacity-0 group-hover:opacity-100">
-                {/* <Badge variant="secondary" className="mb-2">
-                    {new Date(item.created_at).toLocaleDateString("id-ID", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                    })}
-                </Badge> */}
-                <h3 className="font-bold text-base md:text-lg lg:text-xl text-white leading-tight drop-shadow-md line-clamp-1 group-hover:line-clamp-2 transition-all">
-                    {item.title}
-                </h3>
-                <p className="text-white/80 text-xs mt-1 leading-relaxed line-clamp-2 transition-all duration-300 drop-shadow-sm">
-                    {item.description}
-                </p>
-            </div>
+                    <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-end p-5 text-white opacity-0 group-hover:opacity-100">
+                        <h3 className="line-clamp-1 text-base font-bold leading-tight text-white drop-shadow-md transition-all group-hover:line-clamp-2 md:text-lg lg:text-xl">
+                            {item.title}
+                        </h3>
+                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-white/80 drop-shadow-sm transition-all duration-300">
+                            {item.description}
+                        </p>
+                    </div>
+                </>
+            )}
         </motion.div>
     )
 }
 
 export function GallerySection(props: {
     items: Photo[]
+    withDetails?: boolean
     // aos?: boolean
 }) {
     const [selectedItem, setSelectedItem] = useState<Photo | null>(null)
@@ -140,6 +136,7 @@ export function GallerySection(props: {
                                 key={item.id ?? index}
                                 item={item}
                                 index={index}
+                                withDetails={props.withDetails || false}
                                 onSelect={setSelectedItem}
                             />
                         ))}
@@ -152,7 +149,7 @@ export function GallerySection(props: {
 
                 {/* Modal Lightbox */}
                 <AnimatePresence>
-                    {selectedItem && (
+                    {props.withDetails && selectedItem && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
