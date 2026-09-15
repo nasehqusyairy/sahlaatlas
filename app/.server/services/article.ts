@@ -26,6 +26,23 @@ export async function getArticles(
     return articles;
 }
 
+export async function getAllProductSlugs(
+    supabase: SupabaseClient,
+): Promise<string[]> {
+    const { data, error } = await supabase
+        .from("articles")
+        .select("slug, article_tag!inner(tags!inner(name))")
+        .is("deleted_at", null)
+        .eq("is_published", true)
+        .eq("article_tag.tags.name", "product");
+
+    if (error) throw new Response(error.message, { status: 500 });
+
+    return (data ?? [])
+        .map((article) => article.slug)
+        .filter((slug): slug is string => Boolean(slug));
+}
+
 export async function getArticlesPage(
     supabase: SupabaseClient,
     status: ArticleStatus = "published",

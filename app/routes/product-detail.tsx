@@ -1,5 +1,5 @@
 import mammoth from "mammoth";
-import { type LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs, type MetaFunction } from "react-router";
 import { createClient } from "~/.server/supabase";
 import { getPublishedArticleBySlug } from "~/.server/services/article";
 import { getProductsPage } from "~/.server/services/product";
@@ -7,6 +7,28 @@ import type { ComponentProps } from "~/models/route";
 import type { Product } from "~/models/product";
 import { ArticleView } from "~/components/article-view";
 import { ProductCarousel } from "~/components/product-carousel";
+
+export const meta: MetaFunction = ({ loaderData }) => {
+    const article = (loaderData as Awaited<ReturnType<typeof loader>> | undefined)?.article;
+    const title = article?.title
+        ? `${article.title} | Sahla Atlas`
+        : "Product | Sahla Atlas";
+    const description = article?.title
+        ? `Discover ${article.title} from Sahla Atlas, an Indonesian agricultural commodity exporter.`
+        : "Explore products from Sahla Atlas, an Indonesian agricultural commodity exporter.";
+    const url = article?.slug
+        ? `https://www.sahlaatlas.com/products/${article.slug}`
+        : "https://www.sahlaatlas.com/products";
+
+    return [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+    ];
+};
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
     const slug = params.slug;

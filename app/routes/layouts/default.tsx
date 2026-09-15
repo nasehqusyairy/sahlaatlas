@@ -4,9 +4,8 @@ import { PageFooter } from "~/components/page-footer";
 
 export const meta: MetaFunction = () => {
     return [
-        {
-            title: 'Sahla Atlas Export'
-        }
+        { title: "Sahla Atlas | Indonesian Agricultural Commodity Exporter" },
+
     ]
 }
 

@@ -1,8 +1,39 @@
 import mammoth from "mammoth";
-import { type LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs, type MetaFunction } from "react-router";
 import { createClient } from "~/.server/supabase";
 import { getPublishedArticleBySlug } from "~/.server/services/article";
 import BlogDetail from "./blog-detail";
+
+export const meta: MetaFunction = () => [
+    { title: "About Us | Sahla Atlas" },
+    {
+        name: "description",
+        content:
+            "Learn about Sahla Atlas, an Indonesian agricultural commodity export company connecting quality coffee, cocoa, and tea from Indonesian farmers with global markets.",
+    },
+    {
+        name: "keywords",
+        content:
+            "about Sahla Atlas, Indonesian exporter, agricultural commodities, Indonesian coffee, Indonesian cocoa, Indonesian tea, export company",
+    },
+    {
+        property: "og:title",
+        content: "About Us | Sahla Atlas",
+    },
+    {
+        property: "og:description",
+        content:
+            "Discover Sahla Atlas and our commitment to quality, sustainability, and long-term partnerships in Indonesian agricultural commodity exports.",
+    },
+    {
+        property: "og:type",
+        content: "website",
+    },
+    {
+        property: "og:url",
+        content: "https://www.sahlaatlas.com/about",
+    },
+];
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const { supabase } = createClient(request);
@@ -38,7 +69,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .download(storagePath);
 
     if (error || !contentFile) {
-       console.error("Storage download error:", error);
+        console.error("Storage download error:", error);
         throw new Response(error?.message ?? "Failed to download About Us content", { status: 502 });
     }
 

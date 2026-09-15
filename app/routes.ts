@@ -1,17 +1,22 @@
 import { type RouteConfig, index, layout, route } from "@react-router/dev/routes";
 
 export default [
+    route("sitemap.xml", "./routes/seo/sitemap.ts"),
+    route("robots.txt", "./routes/seo/robots.ts"),
+
     layout('routes/layouts/default.tsx', [
         index("routes/home.tsx"),
         route('about', 'routes/about.tsx'),
+
         route('blogs', 'routes/blogs.tsx'),
         route('blogs/:slug', 'routes/blog-detail.tsx'),
         route('tags', 'routes/tags.tsx'),
 
         route('products', 'routes/products.tsx'),
+        route('products/:slug', 'routes/product-detail.tsx'),
+
         route('gallery', 'routes/gallery.tsx'),
         route('contact', 'routes/contact.tsx'),
-        route('products/:slug', 'routes/product-detail.tsx'),
     ]),
     route('admin', 'routes/layouts/admin.tsx', [
         route('', 'routes/admin/dashboard.tsx'),
